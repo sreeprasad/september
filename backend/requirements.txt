@@ -1,0 +1,3 @@
+yutori
+pydantic
+python-dotenv
