@@ -1,0 +1,8 @@
+{
+    profile_themes[] {
+        topic_name
+        frequency_score
+        example_posts[]
+        sentiment_indicator
+    }
+}

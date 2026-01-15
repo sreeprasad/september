@@ -1,0 +1,9 @@
+{
+    posts[] {
+        content
+        primary_topic
+        engagement_quality
+        passion_indicator
+        relevance_to_identity
+    }
+}

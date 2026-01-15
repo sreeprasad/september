@@ -1,3 +1,5 @@
 yutori
 pydantic
 python-dotenv
+agentql
+playwright

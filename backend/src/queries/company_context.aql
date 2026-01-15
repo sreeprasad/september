@@ -1,0 +1,12 @@
+{
+    company {
+        core_business
+        recent_news[] {
+            headline
+            relevance_to_person
+            date
+        }
+        market_position
+        key_differentiators[]
+    }
+}
