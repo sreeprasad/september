@@ -33,10 +33,10 @@ class NavigatorDecisionEngine:
             # Engagement score (normalized)
             engagement = post.get("engagement", {"likes": 0, "comments": 0})
             total_engagement = engagement.get("likes", 0) + engagement.get("comments", 0) * 2
-            if total_engagement > 100:
-                score += 0.2
-            elif total_engagement > 500:
+            if total_engagement > 500:
                 score += 0.4
+            elif total_engagement > 100:
+                score += 0.2
                 
             # Keyword matching
             content = post.get("content", "").lower()
