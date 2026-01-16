@@ -5,7 +5,8 @@
   "method": "POST",
   "endpoint": "/api/briefing/download",
   "body": {
-    "briefing_id": "{{briefingData.id}}"
+    "briefing_id": "{{briefingData.id}}",
+    "linkedin_url": "{{linkedinUrlInput.value}}"
   },
   "onSuccess": [
     "utils.downloadFile(downloadPDF.data, 'briefing.pdf')"
