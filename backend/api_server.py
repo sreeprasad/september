@@ -6,6 +6,7 @@ import asyncio
 # Import pipeline components
 from src.config.yutori_config import YUTORI_CONFIG
 from src.agents.linkedin_browser import LinkedInBrowserAgent
+from src.agents.twitter_browser import TwitterBrowserAgent
 from src.agents.company_researcher import CompanyResearcher
 from src.extractors.profile_extractor import SemanticProfileExtractor
 from src.extractors.theme_engine import ThemeIdentificationEngine
@@ -27,6 +28,7 @@ print(f"DEBUG: Cache directory is {os.path.abspath(cache_manager.cache_dir)}")
 
 class BriefingRequest(BaseModel):
     linkedin_url: str
+    twitter_url: Optional[str] = None
     meeting_context: str
 
 class DownloadRequest(BaseModel):
@@ -37,6 +39,8 @@ class DownloadRequest(BaseModel):
 async def generate_briefing(request: BriefingRequest):
     try:
         # Check cache first (Demo Mode)
+        # Note: Cache key currently only uses LinkedIn URL. 
+        # For simplicity, we keep it that way, assuming LinkedIn is the primary key.
         cached_data = cache_manager.get_from_cache(request.linkedin_url)
         if cached_data:
             return cached_data
@@ -46,6 +50,7 @@ async def generate_briefing(request: BriefingRequest):
         
         # Initialize Agents
         browser = LinkedInBrowserAgent(api_key=api_key)
+        twitter_browser = TwitterBrowserAgent(api_key=api_key)
         researcher = CompanyResearcher(api_key=api_key)
         extractor = SemanticProfileExtractor()
         theme_engine = ThemeIdentificationEngine()
@@ -57,11 +62,18 @@ async def generate_briefing(request: BriefingRequest):
         response_coach = ResponseCoach()
         scenario_builder = ConversationScenarioBuilder()
         
-        # Phase 1
+        # Phase 1: LinkedIn Browsing
         profile_data = await browser.browse_profile(request.linkedin_url, request.meeting_context)
         
         if not profile_data.get("profile"):
              raise Exception("Failed to extract profile data. Please check the URL or try again later.")
+        
+        # Phase 1.5: Twitter Browsing (Optional)
+        twitter_posts = []
+        if request.twitter_url:
+            twitter_posts = await twitter_browser.browse_tweets(request.twitter_url)
+            # Combine LinkedIn posts and Tweets for analysis
+            profile_data["posts"].extend(twitter_posts)
 
         company_name = profile_data["profile"].get("company", "Unknown")
         role = profile_data["profile"].get("current_role", "Unknown")

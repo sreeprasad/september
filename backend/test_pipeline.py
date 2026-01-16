@@ -9,6 +9,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from src.config.yutori_config import YUTORI_CONFIG
 from src.agents.linkedin_browser import LinkedInBrowserAgent
 from src.agents.company_researcher import CompanyResearcher
+from src.agents.twitter_browser import TwitterBrowserAgent
 from src.extractors.profile_extractor import SemanticProfileExtractor
 from src.extractors.theme_engine import ThemeIdentificationEngine
 from src.extractors.data_transformer import StructuredDataTransformer
@@ -21,13 +22,20 @@ async def main():
     
     api_key = YUTORI_CONFIG.get("api_key", "mock_key")
     target_url = "https://www.linkedin.com/in/sreeprasadatrit/"
+    twitter_url = "https://twitter.com/sreeprasad" # Mock URL for testing
     meeting_context = "first meeting, potential technical partnership"
     
     browser = LinkedInBrowserAgent(api_key=api_key)
+    twitter_browser = TwitterBrowserAgent(api_key=api_key)
     researcher = CompanyResearcher(api_key=api_key)
     
     print(f"Browsing: {target_url}")
     profile_data = await browser.browse_profile(target_url, meeting_context)
+    
+    # Twitter extraction
+    print(f"Browsing Twitter: {twitter_url}")
+    twitter_posts = await twitter_browser.browse_tweets(twitter_url)
+    profile_data["posts"].extend(twitter_posts)
     
     company_name = profile_data["profile"]["company"]
     role = profile_data["profile"]["current_role"]

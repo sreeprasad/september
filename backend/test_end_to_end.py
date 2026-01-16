@@ -14,6 +14,7 @@ def verify_end_to_end():
     try:
         response = requests.post(f"{base_url}/generate", json={
             "linkedin_url": "https://linkedin.com/in/janedoe",
+            "twitter_url": "https://twitter.com/janedoe",
             "meeting_context": "End-to-end test run"
         })
         
