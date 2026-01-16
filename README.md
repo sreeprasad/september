@@ -1,6 +1,6 @@
 <div align="center">
 
-# <img src="https://img.icons8.com/?size=48&id=83219&format=png" alt="Orchestrator" width="40"/> Orchestrator
+# <img src="https://img.icons8.com/?id=pKq5yp4WmXN0&format=png&size=48" alt="BriefMe" width="40"/> BriefMe
 
 ### AI-Powered Research & Briefing Agent
 
@@ -17,9 +17,9 @@
 
 <p align="center">
   <a href="#-features">Features</a> •
+  <a href="#-architecture">Architecture</a> •
   <a href="#-installation">Installation</a> •
-  <a href="#-usage">Usage</a> •
-  <a href="#-architecture">Architecture</a>
+  <a href="#-usage">Usage</a>
 </p>
 
 ---
@@ -32,13 +32,13 @@
 <tr>
 <td width="50%">
 
-### <img src="https://img.icons8.com/?size=24&id=13677&format=png" alt="Research"/> **Deep Research Agents**
+### <img src="https://img.icons8.com/?id=9inONWn9EvfI&format=png&size=24" alt="Research"/> **Deep Research Agents**
 Autonomous agents that browse LinkedIn, Twitter, and company websites to gather comprehensive intelligence.
 
 </td>
 <td width="50%">
 
-### <img src="https://img.icons8.com/?size=24&id=37410&format=png" alt="Synthesis"/> **Adaptive Synthesis**
+### <img src="https://img.icons8.com/?id=14748&format=png&size=24" alt="Synthesis"/> **Adaptive Synthesis**
 Intelligent pipeline that synthesizes raw data into structured insights, themes, and strategic talking points.
 
 </td>
@@ -46,13 +46,13 @@ Intelligent pipeline that synthesizes raw data into structured insights, themes,
 <tr>
 <td width="50%">
 
-### <img src="https://img.icons8.com/?size=24&id=59868&format=png" alt="Compliance"/> **Compliance Analysis**
+### <img src="https://img.icons8.com/?id=16239&format=png&size=24" alt="Compliance"/> **Compliance Analysis**
 Analyzes call transcripts for regulatory violations using Claude and ElevenLabs speech-to-text.
 
 </td>
 <td width="50%">
 
-### <img src="https://img.icons8.com/?size=24&id=cEcenq1dEbND&format=png" alt="Dashboard"/> **Interactive Dashboard**
+### <img src="https://img.icons8.com/?id=63251&format=png&size=24" alt="Dashboard"/> **Interactive Dashboard**
 Modern Next.js frontend for visualizing profiles, themes, and generating PDF briefings on demand.
 
 </td>
@@ -60,7 +60,7 @@ Modern Next.js frontend for visualizing profiles, themes, and generating PDF bri
 <tr>
 <td width="50%">
 
-### <img src="https://img.icons8.com/?size=24&id=PGpXkTUdCHk8&format=png" alt="Fabricate"/> **Scenario Fabrication**
+### <img src="https://img.icons8.com/?id=13724&format=png&size=24" alt="Fabricate"/> **Scenario Fabrication**
 Generates mock conversations, pitch simulations, and likely questions to prepare you for meetings.
 
 </td>
@@ -72,6 +72,57 @@ Automatically creates professional PDF briefings ready for download and offline 
 </td>
 </tr>
 </table>
+
+---
+
+## <img src="https://img.icons8.com/?size=32&id=2081&format=png" alt="Architecture"/> Architecture
+
+<div align="center">
+
+```mermaid
+graph TD
+    User([User]) <--> Frontend[Next.js Dashboard]
+    Frontend <-->|API| Backend[FastAPI Server]
+
+    subgraph "Backend Services"
+        Backend --> Agents[Research Agents]
+        Backend --> Extract[Extractors]
+        Backend --> Synthesis[Synthesis Pipeline]
+        Backend --> Fabricate[Conversation Engine]
+        Backend --> Visual[Visual Generators]
+        Backend --> Compliance[Compliance Engine]
+    end
+
+    subgraph "External Integrations"
+        Agents <--> LinkedIn[LinkedIn]
+        Agents <--> Twitter[Twitter/X]
+        Compliance <--> Anthropic[Claude API]
+        Compliance <--> ElevenLabs[Speech-to-Text]
+    end
+
+    Agents --> Extract
+    Extract --> Synthesis
+    Synthesis --> Fabricate
+    Fabricate --> Visual
+```
+
+</div>
+
+### Directory Structure
+
+```
+BriefMe/
+├── 🐍 backend/                 # Python FastAPI Backend
+│   ├── 🤖 src/agents/          # Research agents (LinkedIn, Twitter)
+│   ├── 🧠 src/synthesis/       # Synthesis and reasoning pipelines
+│   ├── 📝 src/extractors/      # Data extraction and transformation
+│   ├── 💬 src/fabricate/       # Conversation simulation
+│   └── 🎨 src/visual/          # PDF and HTML generation
+├── ⚛️ frontend/                # Next.js Frontend
+│   ├── 🧩 components/          # React components
+│   └── 📄 app/                 # Next.js pages and routes
+└── 📄 README.md                # This file
+```
 
 ---
 
@@ -135,7 +186,7 @@ npm install
 
 ## <img src="https://img.icons8.com/?size=32&id=24880&format=png" alt="Usage"/> Usage
 
-### <img src="https://img.icons8.com/?size=24&id=12229&format=png" alt="Server"/> Running the API Server
+### <img src="https://img.icons8.com/?id=13051&format=png&size=24" alt="Server"/> Running the API Server
 
 Start the FastAPI backend to handle requests:
 
@@ -145,7 +196,7 @@ python api_server.py
 ```
 The server will start at `http://localhost:8000`.
 
-### <img src="https://img.icons8.com/?size=24&id=108784&format=png" alt="Web"/> Running the Frontend
+### <img src="https://img.icons8.com/?id=63251&format=png&size=24" alt="Web"/> Running the Frontend
 
 Start the Next.js development server:
 
@@ -153,7 +204,7 @@ Start the Next.js development server:
 # From the frontend directory
 npm run dev
 ```
-Open `http://localhost:3000` to access the Orchestrator dashboard.
+Open `http://localhost:3000` to access the BriefMe dashboard.
 
 ### <img src="https://img.icons8.com/?size=24&id=60677&format=png" alt="CLI"/> CLI Usage
 
@@ -162,24 +213,6 @@ You can also run the research pipeline directly from the CLI:
 ```bash
 # From the backend directory
 python main.py
-```
-
----
-
-## <img src="https://img.icons8.com/?size=32&id=2081&format=png" alt="Architecture"/> Architecture
-
-```
-Orchestrator/
-├── 🐍 backend/                 # Python FastAPI Backend
-│   ├── 🤖 src/agents/          # Research agents (LinkedIn, Twitter)
-│   ├── 🧠 src/synthesis/       # Synthesis and reasoning pipelines
-│   ├── 📝 src/extractors/      # Data extraction and transformation
-│   ├── 💬 src/fabricate/       # Conversation simulation
-│   └── 🎨 src/visual/          # PDF and HTML generation
-├── ⚛️ frontend/                # Next.js Frontend
-│   ├── 🧩 components/          # React components
-│   └── 📄 app/                 # Next.js pages and routes
-└── 📄 README.md                # This file
 ```
 
 ---
@@ -193,6 +226,6 @@ Orchestrator/
   <img src="https://img.shields.io/badge/Powered_by-Yutori-blue?style=for-the-badge" alt="Powered by Yutori">
 </p>
 
-**[⬆ Back to Top](#-orchestrator)**
+**[⬆ Back to Top](#-briefme)**
 
 </div>
