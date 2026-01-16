@@ -18,10 +18,14 @@ export default function Home() {
     setBriefingData(null);
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+    const timeoutId = setTimeout(() => {
+        console.log("Request timed out after 300s");
+        controller.abort("Request timed out after 5 minutes");
+    }, 300000); // 5 minutes timeout
 
     try {
-      const response = await fetch("http://localhost:8000/api/briefing/generate", {
+      // Use 127.0.0.1 to avoid localhost IPv6 resolution issues
+      const response = await fetch("http://127.0.0.1:8000/api/briefing/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -36,16 +40,9 @@ export default function Home() {
       const responseData = await response.json();
       
       if (!response.ok) {
-        // #region agent log
-        fetch('http://127.0.0.1:7247/ingest/80f3ef17-6c9f-413b-8834-23a71a0136f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'frontend/app/page.tsx:34',message:'Generate request failed',data:{status: response.status},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H_API_CONNECT'})}).catch(()=>{});
-        // #endregion
         throw new Error(responseData.detail || "Failed to generate briefing");
       }
       
-      // #region agent log
-      fetch('http://127.0.0.1:7247/ingest/80f3ef17-6c9f-413b-8834-23a71a0136f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'frontend/app/page.tsx:37',message:'Generate request success',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H_API_CONNECT'})}).catch(()=>{});
-      // #endregion
-
       setBriefingData(responseData);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

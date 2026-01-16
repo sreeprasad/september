@@ -1,0 +1,10 @@
+{"sessionId": "debug-session", "timestamp": 1768603738508, "location": "backend/api_server.py", "message": "Backend server starting", "data": {}, "hypothesisId": "H_BACKEND_START"}
+{"sessionId": "debug-session", "timestamp": 1768604100253, "location": "backend/api_server.py", "message": "Backend server starting", "data": {}, "hypothesisId": "H_BACKEND_START"}
+{"sessionId": "debug-session", "timestamp": 1768604357500, "location": "backend/api_server.py", "message": "generate_briefing called", "data": {"linkedin_url": "https://linkedin.com/in/janedoe"}, "hypothesisId": "H_GENERATE"}
+{"sessionId": "debug-session", "timestamp": 1768604405311, "location": "backend/api_server.py", "message": "generate_briefing called", "data": {"linkedin_url": "https://linkedin.com/in/janedoe"}, "hypothesisId": "H_GENERATE"}
+{"location":"frontend/app/page.tsx:37","message":"Generate request success","data":{},"timestamp":1768604405316,"sessionId":"debug-session","hypothesisId":"H_API_CONNECT"}
+{"sessionId": "debug-session", "timestamp": 1768604474413, "location": "backend/api_server.py", "message": "generate_briefing called", "data": {"linkedin_url": "https://linkedin.com/in/janedoe"}, "hypothesisId": "H_GENERATE"}
+{"location":"frontend/app/page.tsx:37","message":"Generate request success","data":{},"timestamp":1768604474417,"sessionId":"debug-session","hypothesisId":"H_API_CONNECT"}
+{"sessionId": "debug-session", "timestamp": 1768604516178, "location": "backend/api_server.py", "message": "generate_briefing called", "data": {"linkedin_url": "https://linkedin.com/in/janedoe"}, "hypothesisId": "H_GENERATE"}
+{"location":"frontend/app/page.tsx:37","message":"Generate request success","data":{},"timestamp":1768604516182,"sessionId":"debug-session","hypothesisId":"H_API_CONNECT"}
+{"sessionId": "debug-session", "timestamp": 1768604608655, "location": "backend/api_server.py", "message": "generate_briefing called", "data": {"linkedin_url": "https://linkedin.com/in/janedoe"}, "hypothesisId": "H_GENERATE"}

@@ -1,23 +1,47 @@
 import React from 'react';
-// ReactMarkdown removed as it was unused and caused lint errors
+import ReactMarkdown from 'react-markdown';
 import { Sparkles, Copy, Share, X, Globe, MapPin } from 'lucide-react';
 
 interface BriefingCardProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   onClose: () => void;
 }
 
 const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
-  // Convert the complex object structure into a readable markdown format if needed
-  // Or just display the data nicely. 
-  // Assuming 'data' matches the backend structure, we might need to format it or use a markdown field if available.
-  // For this design, let's try to display the 'markdown' field if it exists, or fallback to components.
-  // The backend returns { person, company_context, themes, talking_points, etc. }
-  // We'll construct a markdown representation or use specific components.
-  
-  // Since the reference implementation used a "markdown" field, let's see if we can construct one or if we should build a custom view.
-  // The current backend returns structured JSON. Let's build a custom view that *looks* like the reference card but uses our structured data.
+  // Helper to extract themes array from potentially complex object
+  const themesList = React.useMemo(() => {
+    if (!data.themes) return [];
+    if (Array.isArray(data.themes)) return data.themes;
+    // Handle object structure { primary: "...", secondary: [...] }
+    return [
+      data.themes.primary,
+      ...(Array.isArray(data.themes.secondary) ? data.themes.secondary : [])
+    ].filter(Boolean);
+  }, [data.themes]);
+
+  // Helper to extract company info
+  const companyInfo = React.useMemo(() => {
+      if (typeof data.company_context === 'string') return { name: '', description: data.company_context, facts: [] };
+      return {
+          name: data.company_context?.name || '',
+          description: data.company_context?.description || '',
+          facts: data.company_context?.key_facts || []
+      };
+  }, [data.company_context]);
+
+  // Helper for conversations
+  const conversationScenarios = React.useMemo(() => {
+      if (Array.isArray(data.mock_conversations)) return data.mock_conversations;
+      // If it's the structured object with likely_questions, etc.
+      if (data.mock_conversations?.conversation_scenarios) {
+          // Convert the scenarios object values to array
+          return Object.values(data.mock_conversations.conversation_scenarios).map((s: any) => ({
+              scenario: s.context?.replace('_', ' ') || "Scenario",
+              script: s.sample_dialogue?.map((d: any) => ({ speaker: d.speaker, text: d.message })) || []
+          }));
+      }
+      return [];
+  }, [data.mock_conversations]);
 
   return (
     <div className="w-full max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
@@ -58,7 +82,6 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
           <div className="flex items-start gap-6 mb-10 pb-10 border-b border-white/5">
             <div className="w-24 h-24 rounded-2xl bg-slate-800 border border-white/10 overflow-hidden shrink-0">
                {data.person?.photo_url ? (
-                  /* eslint-disable-next-line @next/next/no-img-element */
                   <img src={data.person.photo_url} alt={data.person.name} className="w-full h-full object-cover" />
                ) : (
                   <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-slate-600">
@@ -98,14 +121,16 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
                       <h3 className="text-sm font-bold text-indigo-400 tracking-widest uppercase">Key Talking Points</h3>
                    </div>
                    <ul className="space-y-4">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {data.talking_points?.map((point: any, idx: number) => (
                          <li key={idx} className="flex gap-4 group">
                             <span className="text-indigo-500/50 font-mono text-sm mt-1">0{idx + 1}</span>
                             <div>
                                <p className="text-slate-200 font-medium group-hover:text-white transition-colors">
-                                 {point.topic || point}
+                                 {point.point || point.topic || point}
                                </p>
+                               {point.why_selected && (
+                                  <p className="text-sm text-slate-500 mt-1">{point.why_selected}</p>
+                               )}
                                {point.reasoning && (
                                   <p className="text-sm text-slate-500 mt-1">{point.reasoning}</p>
                                )}
@@ -122,15 +147,14 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
                    </div>
                    <div className="bg-white/5 rounded-xl p-6 border border-white/5">
                       <div className="flex flex-wrap gap-2 mb-4">
-                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                         {data.themes?.map((theme: any, idx: number) => (
+                         {themesList.map((theme: any, idx: number) => (
                             <span key={idx} className="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium">
                                {theme.theme || theme}
                             </span>
                          ))}
                       </div>
                       <p className="text-sm text-slate-400 italic">
-                         &quot;Based on their content, {data.person?.name} appears to value {data.themes?.[0]?.theme?.toLowerCase() || "innovation"} and professional growth.&quot;
+                         "Based on their content, {data.person?.name} appears to value {themesList[0] || "innovation"} and professional growth."
                       </p>
                    </div>
                 </section>
@@ -144,7 +168,13 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
                       <h3 className="text-sm font-bold text-emerald-400 tracking-widest uppercase">Company Context</h3>
                    </div>
                    <div className="prose prose-invert prose-sm text-slate-300">
-                      <p>{data.company_context || "No company data available."}</p>
+                      {companyInfo.name && <h4 className="text-white font-semibold mb-2">{companyInfo.name}</h4>}
+                      <ul className="list-disc pl-4 space-y-1">
+                          {companyInfo.facts.map((fact: string, idx: number) => (
+                              <li key={idx}>{fact}</li>
+                          ))}
+                          {companyInfo.facts.length === 0 && <p>No specific company facts available.</p>}
+                      </ul>
                    </div>
                 </section>
                 
@@ -154,13 +184,11 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
                       <h3 className="text-sm font-bold text-amber-400 tracking-widest uppercase">Suggested approach</h3>
                    </div>
                    <div className="space-y-4">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {data.mock_conversations?.map((conv: any, idx: number) => (
+                      {conversationScenarios.map((conv: any, idx: number) => (
                          <div key={idx} className="bg-[#030014]/50 p-4 rounded-lg border border-white/5">
-                            <h4 className="text-white font-medium text-sm mb-2">{conv.scenario || `Scenario ${idx + 1}`}</h4>
+                            <h4 className="text-white font-medium text-sm mb-2 capitalize">{conv.scenario || `Scenario ${idx + 1}`}</h4>
                             <div className="space-y-3 pl-4 border-l border-white/10">
-                               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                               {conv.script?.slice(0, 2).map((line: any, i: number) => (
+                               {conv.script?.slice(0, 4).map((line: any, i: number) => (
                                   <p key={i} className="text-xs text-slate-400">
                                      <span className="text-slate-500 uppercase text-[10px] mr-2">{line.speaker}:</span>
                                      {line.text}
@@ -169,6 +197,9 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
                             </div>
                          </div>
                       ))}
+                      {conversationScenarios.length === 0 && (
+                          <p className="text-slate-500 text-sm">No scenarios generated.</p>
+                      )}
                    </div>
                 </section>
              </div>
@@ -183,7 +214,6 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
                 Verified Sources
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {data.sources.map((source: any, idx: number) => (
                   <a 
                     key={idx}

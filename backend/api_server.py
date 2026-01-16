@@ -33,30 +33,6 @@ load_dotenv()
 
 app = FastAPI()
 
-# --- DEBUG INSTRUMENTATION START ---
-import time
-LOG_PATH = "/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log"
-
-def log_debug(message: str, data: dict = None, hypothesis_id: str = None):
-    try:
-        entry = {
-            "sessionId": "debug-session",
-            "timestamp": int(time.time() * 1000),
-            "location": "backend/api_server.py",
-            "message": message,
-            "data": data or {},
-            "hypothesisId": hypothesis_id
-        }
-        with open(LOG_PATH, "a") as f:
-            f.write(json.dumps(entry) + "\n")
-    except Exception as e:
-        print(f"Debug logging failed: {e}")
-
-@app.on_event("startup")
-async def startup_event():
-    log_debug("Backend server starting", {}, "H_BACKEND_START")
-# --- DEBUG INSTRUMENTATION END ---
-
 # Allow CORS
 app.add_middleware(
     CORSMiddleware,
@@ -167,9 +143,6 @@ def health_check():
 
 @app.post("/api/briefing/generate")
 async def generate_briefing(request: BriefingRequest):
-    # #region agent log
-    log_debug("generate_briefing called", {"linkedin_url": request.linkedin_url}, "H_GENERATE")
-    # #endregion
     try:
         # Check cache first (Demo Mode)
         # Note: Cache key currently only uses LinkedIn URL. 
@@ -280,16 +253,9 @@ async def generate_briefing(request: BriefingRequest):
         # Save to cache for next time
         cache_manager.save_to_cache(request.linkedin_url, final_output)
 
-        # #region agent log
-        log_debug("generate_briefing success", {"company": company_name}, "H_GENERATE")
-        # #endregion
-
         return final_output
 
     except Exception as e:
-        # #region agent log
-        log_debug("generate_briefing failed", {"error": str(e)}, "H_GENERATE")
-        # #endregion
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/briefing/download")
