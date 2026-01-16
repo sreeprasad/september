@@ -31,9 +31,16 @@ export default function Home() {
       const responseData = await response.json();
       
       if (!response.ok) {
+        // #region agent log
+        fetch('http://127.0.0.1:7247/ingest/80f3ef17-6c9f-413b-8834-23a71a0136f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'frontend/app/page.tsx:34',message:'Generate request failed',data:{status: response.status},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H_API_CONNECT'})}).catch(()=>{});
+        // #endregion
         throw new Error(responseData.detail || "Failed to generate briefing");
       }
       
+      // #region agent log
+      fetch('http://127.0.0.1:7247/ingest/80f3ef17-6c9f-413b-8834-23a71a0136f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'frontend/app/page.tsx:37',message:'Generate request success',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H_API_CONNECT'})}).catch(()=>{});
+      // #endregion
+
       setBriefingData(responseData);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

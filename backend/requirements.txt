@@ -8,3 +8,6 @@ uvicorn
 requests
 jinja2
 fpdf2
+elevenlabs
+anthropic
+python-multipart
