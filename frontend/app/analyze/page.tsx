@@ -5,10 +5,26 @@ import DottedBackground from "../components/DottedBackground";
 import Header from "../components/Header";
 import { Upload, FileText, AlertTriangle, CheckCircle, Search, Loader2 } from "lucide-react";
 
+interface Violation {
+  severity: "HIGH" | "MEDIUM" | "LOW";
+  rule_code: string;
+  explanation: string;
+  quote: string;
+  suggestion: string;
+}
+
+interface AnalyzeResult {
+  total_violations: number;
+  risk_level: "HIGH" | "MEDIUM" | "LOW" | "NONE";
+  summary: string;
+  violations: Violation[];
+  transcript?: string;
+}
+
 export default function AnalyzePage() {
   const [activeTab, setActiveTab] = useState<"upload" | "text">("upload");
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<AnalyzeResult | null>(null);
   const [transcript, setTranscript] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -29,7 +45,8 @@ export default function AnalyzePage() {
       });
 
       if (!response.ok) {
-        throw new Error("Analysis failed");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || "Analysis failed");
       }
 
       const data = await response.json();
@@ -52,9 +69,10 @@ export default function AnalyzePage() {
       // But I cannot modify backend in this step easily without going back.
       // Let's proceed with what we have. If transcript is missing in UI, we can note it.
       
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error analyzing audio:", error);
-      alert("Failed to analyze audio. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : "Please try again.";
+      alert(`Failed to analyze audio: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
@@ -74,14 +92,16 @@ export default function AnalyzePage() {
       });
 
       if (!response.ok) {
-        throw new Error("Analysis failed");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || "Analysis failed");
       }
 
       const data = await response.json();
       setResult(data);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error analyzing text:", error);
-      alert("Failed to analyze text. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : "Please try again.";
+      alert(`Failed to analyze text: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
@@ -247,7 +267,7 @@ export default function AnalyzePage() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {result.violations.map((violation: any, idx: number) => (
+                                {result.violations.map((violation, idx) => (
                                     <tr key={idx} className="hover:bg-white/5 transition-colors">
                                         <td className="px-6 py-4">
                                             <span className={`px-2 py-1 rounded text-xs font-bold border ${
@@ -262,7 +282,7 @@ export default function AnalyzePage() {
                                         <td className="px-6 py-4 text-slate-300 max-w-xs">
                                             <p className="mb-2">{violation.explanation}</p>
                                             <div className="bg-white/5 p-2 rounded border border-white/5 text-xs italic text-slate-400">
-                                                "{violation.quote}"
+                                                &quot;{violation.quote}&quot;
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-emerald-400">{violation.suggestion}</td>

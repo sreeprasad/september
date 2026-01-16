@@ -1,9 +1,26 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import Image from 'next/image';
 import { Sparkles, Copy, Share, X, Globe, MapPin } from 'lucide-react';
 
+interface BriefingData {
+  themes?: any; // Complex union type simplified for now
+  company_context?: any;
+  mock_conversations?: any;
+  person?: {
+    name?: string;
+    photo_url?: string;
+    headline?: string;
+    location?: string;
+    company?: string;
+    about?: string;
+    summary?: string;
+  };
+  talking_points?: any[];
+  sources?: { uri: string; title: string }[];
+}
+
 interface BriefingCardProps {
-  data: any;
+  data: BriefingData;
   onClose: () => void;
 }
 
@@ -25,7 +42,7 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
       return {
           name: data.company_context?.name || '',
           description: data.company_context?.description || '',
-          facts: data.company_context?.key_facts || []
+          facts: (data.company_context?.key_facts || []) as string[]
       };
   }, [data.company_context]);
 
@@ -80,9 +97,15 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
           
           {/* Profile Header */}
           <div className="flex items-start gap-6 mb-10 pb-10 border-b border-white/5">
-            <div className="w-24 h-24 rounded-2xl bg-slate-800 border border-white/10 overflow-hidden shrink-0">
+            <div className="w-24 h-24 rounded-2xl bg-slate-800 border border-white/10 overflow-hidden shrink-0 relative">
                {data.person?.photo_url ? (
-                  <img src={data.person.photo_url} alt={data.person.name} className="w-full h-full object-cover" />
+                  <Image 
+                    src={data.person.photo_url} 
+                    alt={data.person.name || "Profile"} 
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
                ) : (
                   <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-slate-600">
                     {data.person?.name?.charAt(0) || "?"}
@@ -154,7 +177,7 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ data, onClose }) => {
                          ))}
                       </div>
                       <p className="text-sm text-slate-400 italic">
-                         "Based on their content, {data.person?.name} appears to value {themesList[0] || "innovation"} and professional growth."
+                         &quot;Based on their content, {data.person?.name} appears to value {typeof themesList[0] === 'string' ? themesList[0] : (themesList[0] as any)?.theme || "innovation"} and professional growth.&quot;
                       </p>
                    </div>
                 </section>

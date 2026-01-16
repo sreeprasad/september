@@ -1,0 +1,85 @@
+{
+  "profile": {
+    "name": "sreeprasad Govindankutty",
+    "headline": "Professional",
+    "current_role": "Reddit, Inc.",
+    "company": "Reddit, Inc.",
+    "location": "Sunnyvale, California, United States",
+    "connections": 500
+  },
+  "posts": [
+    {
+      "content": "I wanted to share something exciting to kick off the year - B.E.L.L.E is partnering with MiniMax - a leading multi-modal company building\u2026",
+      "date": "Unknown Date",
+      "engagement": {
+        "likes": 0,
+        "comments": 0
+      },
+      "priority_score": 0.8,
+      "priority_reason": "Aligns with meeting context (partner)"
+    },
+    {
+      "content": "Top 5 engineering blogs to learn & apply These are top 5 engineering blogs I read over weekends in no particular order LinkedIn Engineering blog - Join LinkedIn\u2026",
+      "date": "Oct 22, 2017",
+      "engagement": {
+        "likes": 3,
+        "comments": 0
+      },
+      "priority_score": 0.5,
+      "priority_reason": "General professional update"
+    },
+    {
+      "content": "In January 2013 I joined a small startup called DeepMind - starting with the Atari project, fascinated by the ambition and excellence of this unique\u2026",
+      "date": "Unknown Date",
+      "engagement": {
+        "likes": 0,
+        "comments": 0
+      },
+      "priority_score": 0.5,
+      "priority_reason": "General professional update"
+    },
+    {
+      "content": "After 12 incredible years, I'm sharing that I decided to leave Google this week. \n\nIt's been an amazing journey, and I'm deeply grateful for the\u2026",
+      "date": "Unknown Date",
+      "engagement": {
+        "likes": 0,
+        "comments": 0
+      },
+      "priority_score": 0.5,
+      "priority_reason": "General professional update"
+    },
+    {
+      "content": "It begins!",
+      "date": "Unknown Date",
+      "engagement": {
+        "likes": 0,
+        "comments": 0
+      },
+      "priority_score": 0.5,
+      "priority_reason": "General professional update"
+    }
+  ],
+  "company_context": {
+    "name": "Reddit, Inc.",
+    "industry": "Technology",
+    "funding": {
+      "stage": "Unknown",
+      "amount": "Unknown"
+    },
+    "recent_news": [
+      "No specific news found for Reddit, Inc."
+    ],
+    "competitors": []
+  },
+  "decision_metadata": {
+    "total_data_points_found": 18,
+    "data_points_surfaced": 5,
+    "decision_rationale": [
+      "Selected post from None due to Aligns with meeting context (partner)",
+      "Selected post from Oct 22, 2017 due to General professional update",
+      "Selected post from None due to General professional update",
+      "Selected post from None due to General professional update",
+      "Selected post from None due to General professional update"
+    ]
+  }
+}

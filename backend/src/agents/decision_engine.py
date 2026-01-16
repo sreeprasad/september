@@ -31,8 +31,16 @@ class NavigatorDecisionEngine:
             score = 0.5  # Base score
             
             # Engagement score (normalized)
-            engagement = post.get("engagement", {"likes": 0, "comments": 0})
-            total_engagement = engagement.get("likes", 0) + engagement.get("comments", 0) * 2
+            engagement = post.get("engagement", {}) or {}
+            
+            def safe_int(val):
+                if isinstance(val, int): return val
+                if isinstance(val, str) and val.isdigit(): return int(val)
+                return 0
+
+            likes = safe_int(engagement.get("likes"))
+            comments = safe_int(engagement.get("comments"))
+            total_engagement = likes + comments * 2
             if total_engagement > 500:
                 score += 0.4
             elif total_engagement > 100:

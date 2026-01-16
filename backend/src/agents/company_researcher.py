@@ -1,6 +1,7 @@
 import asyncio
 from typing import Dict, Any
 from playwright.async_api import async_playwright
+import json
 
 class CompanyResearcher:
     """
@@ -17,6 +18,16 @@ class CompanyResearcher:
         print(f"Researching company: {company_name} for role: {person_role}")
         
         recent_news = []
+
+        if not company_name:
+             print("Warning: No company name provided for research.")
+             return {
+                "name": "Unknown",
+                "industry": "Unknown",
+                "funding": {"stage": "Unknown", "amount": "Unknown"},
+                "recent_news": ["No company name provided."],
+                "competitors": []
+            }
         
         try:
              async with async_playwright() as p:

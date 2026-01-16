@@ -4,6 +4,7 @@ from playwright.async_api import async_playwright
 import agentql
 from .decision_engine import NavigatorDecisionEngine
 import os
+import json
 
 class LinkedInBrowserAgent:
     """
@@ -72,6 +73,19 @@ class LinkedInBrowserAgent:
                 if response:
                     raw_profile = response.get("profile", {}) or {}
                     raw_posts = response.get("posts", []) or []
+
+                    # Sanitize connections count
+                    if "connections" in raw_profile and isinstance(raw_profile["connections"], str):
+                        try:
+                            # Extract numbers from string like "500+" -> 500
+                            import re
+                            nums = re.findall(r'\d+', raw_profile["connections"])
+                            if nums:
+                                raw_profile["connections"] = int(nums[0])
+                            else:
+                                raw_profile["connections"] = 0
+                        except:
+                            raw_profile["connections"] = 0
                 else:
                     pass
 
