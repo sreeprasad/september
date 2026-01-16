@@ -81,29 +81,83 @@ Automatically creates professional PDF briefings ready for download and offline 
 
 ```mermaid
 graph TD
-    User([User]) <--> Frontend[Next.js Dashboard]
-    Frontend <-->|API| Backend[FastAPI Server]
+    %% Users and Frontend
+    User([User]) <-->|Interacts| Frontend[Next.js Frontend]
+    
+    subgraph "Frontend Layer"
+        Frontend -->|Upload/Analyze| AnalyzePage[Analyze Page]
+        Frontend -->|Input URL| HomePage[Home Page]
+        Frontend -->|Generate PDF| PDFRequest[PDF Request]
+    end
+
+    %% Backend Connection
+    Frontend <-->|REST API| Backend[FastAPI Server]
 
     subgraph "Backend Services"
-        Backend --> Agents[Research Agents]
-        Backend --> Extract[Extractors]
-        Backend --> Synthesis[Synthesis Pipeline]
-        Backend --> Fabricate[Conversation Engine]
-        Backend --> Visual[Visual Generators]
-        Backend --> Compliance[Compliance Engine]
+        Backend -->|Orchestrates| Pipeline[Research Pipeline]
+        
+        %% Phase 1: Research
+        subgraph "Phase 1: Research Agents"
+            Pipeline -->|Browses| LinkedIn[LinkedIn Browser]
+            Pipeline -->|Browses| Twitter[Twitter Browser]
+            Pipeline -->|Research| Company[Company Researcher]
+            
+            LinkedIn <-->|AgentQL| Web1[LinkedIn]
+            Twitter <-->|AgentQL| Web2[Twitter/X]
+            Company <-->|AgentQL| Web3[Company Sites]
+        end
+
+        %% Phase 2: Extraction
+        subgraph "Phase 2: Extraction & Analysis"
+            LinkedIn & Twitter & Company --> RawData[Raw HTML/Text]
+            RawData --> Extractor[Semantic Extractor]
+            RawData --> ThemeEngine[Theme Engine]
+            
+            Extractor -->|Extracts| StructuredData[Structured Profile]
+            ThemeEngine -->|Identifies| Themes[Key Themes]
+            
+            StructuredData & Themes --> Transformer[Data Transformer]
+        end
+
+        %% Phase 3: Synthesis
+        subgraph "Phase 3: Synthesis"
+            Transformer --> SynthesisPipe[Adaptive Synthesis Pipeline]
+            SynthesisPipe --> Classifier[Person Classifier]
+            SynthesisPipe --> Reasoning[Reasoning Chain]
+            
+            Classifier & Reasoning --> Insights[Strategic Insights]
+        end
+
+        %% Phase 4: Fabrication
+        subgraph "Phase 4: Fabrication"
+            Insights --> Fabricate[Conversation Engine]
+            Fabricate --> MockGen[Mock Conversation Gen]
+            Fabricate --> Coach[Response Coach]
+            Fabricate --> Scenarios[Scenario Builder]
+            
+            MockGen & Coach & Scenarios --> SimData[Simulation Data]
+        end
+        
+        %% Phase 5: Visualization & Output
+        subgraph "Phase 5: Output"
+            SimData --> Visual[Visual Generators]
+            Visual --> HTMLGen[HTML Generator]
+            Visual --> PDFGen[PDF Generator]
+            
+            PDFGen -->|Returns| PDFFile[Briefing PDF]
+        end
+
+        %% Compliance Module (Separate Flow)
+        subgraph "Compliance Module"
+            Backend -->|Audio/Text| Transcribe[ElevenLabs STT]
+            Transcribe -->|Transcript| Analyzer[Compliance Analyzer]
+            Analyzer <-->|Prompt| Claude[Anthropic Claude]
+        end
     end
 
-    subgraph "External Integrations"
-        Agents <--> LinkedIn[LinkedIn]
-        Agents <--> Twitter[Twitter/X]
-        Compliance <--> Anthropic[Claude API]
-        Compliance <--> ElevenLabs[Speech-to-Text]
-    end
-
-    Agents --> Extract
-    Extract --> Synthesis
-    Synthesis --> Fabricate
-    Fabricate --> Visual
+    %% Data Return
+    Visual -->|JSON/PDF| Backend
+    Backend -->|Response| Frontend
 ```
 
 </div>
