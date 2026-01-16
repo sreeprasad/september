@@ -11,6 +11,7 @@ import TalkingPoints from "./components/TalkingPoints";
 import WhyPanel from "./components/WhyPanel";
 import MockConversations from "./components/MockConversations";
 import AgentProgress from "./components/AgentProgress";
+import AnimatedBackground from "./components/AnimatedBackground";
 
 export default function Home() {
   const [linkedinUrl, setLinkedinUrl] = useState("");
@@ -56,16 +57,27 @@ export default function Home() {
       <nav className="sticky top-0 z-50 glass-panel border-b-0 rounded-none bg-white/80">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-tr from-indigo-600 to-violet-600 p-1.5 rounded-lg shadow-lg shadow-indigo-500/30">
+            <motion.div 
+              className="bg-gradient-to-tr from-indigo-600 to-violet-600 p-1.5 rounded-lg shadow-lg shadow-indigo-500/30"
+              animate={{ 
+                scale: [1, 1.05, 1],
+                boxShadow: [
+                  "0 10px 15px -3px rgba(99, 102, 241, 0.3)",
+                  "0 10px 20px -3px rgba(99, 102, 241, 0.5)",
+                  "0 10px 15px -3px rgba(99, 102, 241, 0.3)"
+                ]
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
               <Sparkles className="w-5 h-5 text-white" />
-            </div>
+            </motion.div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">
               BriefMe
             </span>
           </div>
           <div className="flex items-center gap-4 text-sm font-medium text-slate-600">
-            <button className="hover:text-slate-900 transition-colors">History</button>
-            <button className="hover:text-slate-900 transition-colors">Templates</button>
+            <button className="hover:text-slate-900 transition-colors px-3 py-1.5 hover:bg-slate-100/50 rounded-lg">History</button>
+            <button className="hover:text-slate-900 transition-colors px-3 py-1.5 hover:bg-slate-100/50 rounded-lg">Templates</button>
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 border border-white shadow-sm flex items-center justify-center text-indigo-700 font-bold text-xs">
               JD
             </div>
@@ -84,7 +96,7 @@ export default function Home() {
               className="max-w-3xl mx-auto space-y-10 mt-12"
             >
               <div className="text-center space-y-6">
-                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1] tracking-tight">
                   Master every meeting with <br/>
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">AI-powered intel</span>.
                 </h1>
@@ -93,11 +105,16 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="glass-panel p-8 rounded-3xl space-y-8 relative overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <motion.div 
+                className="glass-panel p-8 rounded-3xl space-y-8 relative overflow-hidden group border border-white/40 shadow-2xl shadow-indigo-100/50"
+                initial={{ scale: 0.98, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+              >
+                <AnimatedBackground />
                 
                 {isLoading ? (
-                  <div className="py-8">
+                  <div className="py-8 relative z-10">
                     <AgentProgress />
                   </div>
                 ) : (
@@ -105,11 +122,11 @@ export default function Home() {
                     <div className="space-y-6 relative z-10">
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-400 ml-1">Target Profile</label>
-                        <div className="relative">
+                        <div className="relative group/input">
                           <input
                             type="text"
                             placeholder="https://linkedin.com/in/username"
-                            className="w-full pl-4 pr-4 py-4 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all shadow-sm text-lg"
+                            className="w-full pl-4 pr-4 py-4 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all shadow-sm text-lg placeholder:text-slate-300 group-hover/input:border-indigo-200"
                             value={linkedinUrl}
                             onChange={(e) => setLinkedinUrl(e.target.value)}
                           />
@@ -122,7 +139,7 @@ export default function Home() {
                           <input
                             type="text"
                             placeholder="@username"
-                            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all shadow-sm"
+                            className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all shadow-sm placeholder:text-slate-300 hover:border-indigo-200"
                             value={twitterUrl}
                             onChange={(e) => setTwitterUrl(e.target.value)}
                           />
@@ -131,7 +148,7 @@ export default function Home() {
                           <label className="text-xs font-bold uppercase tracking-wider text-slate-400 ml-1">Meeting Context</label>
                           <div className="relative">
                             <select 
-                              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all appearance-none shadow-sm cursor-pointer"
+                              className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all appearance-none shadow-sm cursor-pointer hover:border-indigo-200"
                               value={meetingContext}
                               onChange={(e) => setMeetingContext(e.target.value)}
                             >
@@ -151,7 +168,7 @@ export default function Home() {
                     </div>
 
                     {error && (
-                      <div className="p-4 bg-red-50 text-red-700 rounded-xl text-sm flex items-center gap-2 border border-red-100 animate-in fade-in slide-in-from-top-2">
+                      <div className="p-4 bg-red-50 text-red-700 rounded-xl text-sm flex items-center gap-2 border border-red-100 animate-in fade-in slide-in-from-top-2 relative z-10">
                         <div className="w-1.5 h-1.5 rounded-full bg-red-600"></div>
                         {error}
                       </div>
@@ -160,7 +177,7 @@ export default function Home() {
                     <button
                       onClick={handleGenerate}
                       disabled={isLoading || !linkedinUrl}
-                      className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-4 rounded-xl transition-all shadow-xl shadow-slate-900/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group relative overflow-hidden"
+                      className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-4 rounded-xl transition-all shadow-xl shadow-slate-900/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group relative overflow-hidden z-10"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[length:200%_auto] animate-gradient"></div>
                       <span className="relative flex items-center gap-2">
@@ -169,7 +186,7 @@ export default function Home() {
                     </button>
                   </>
                 )}
-              </div>
+              </motion.div>
             </motion.div>
           ) : (
             <motion.div
