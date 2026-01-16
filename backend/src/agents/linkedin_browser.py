@@ -67,22 +67,17 @@ class LinkedInBrowserAgent:
                 """
                 
                 # Execute Query
-                print("Executing AgentQL query...")
                 response = await page.query_data(QUERY)
                 
                 if response:
                     raw_profile = response.get("profile", {}) or {}
                     raw_posts = response.get("posts", []) or []
-                    
-                    print(f"Extracted profile: {raw_profile.get('name')}")
-                    print(f"Found {len(raw_posts)} posts")
                 else:
-                    print("No data extracted from page.")
+                    pass
 
                 await browser.close()
                 
         except Exception as e:
-            print(f"Error during browsing: {e}")
             # If we fail (e.g. no AgentQL key or browser issue), we return empty to avoid breaking pipeline completely
             # but we are NOT falling back to mock data.
 

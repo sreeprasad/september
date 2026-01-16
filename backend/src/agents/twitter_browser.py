@@ -19,7 +19,6 @@ class TwitterBrowserAgent:
         """
         Browse a Twitter/X profile and return recent tweets.
         """
-        print(f"Browsing Twitter profile: {twitter_url}")
         
         raw_tweets = []
 
@@ -55,12 +54,10 @@ class TwitterBrowserAgent:
                 }
                 """
                 
-                print("Executing AgentQL query on Twitter...")
                 response = await page.query_data(QUERY)
                 
                 if response:
                     tweets_data = response.get("tweets", []) or []
-                    print(f"Found {len(tweets_data)} tweets")
                     
                     # Normalize to match the 'posts' structure expected by extractors
                     for t in tweets_data:
@@ -74,11 +71,11 @@ class TwitterBrowserAgent:
                             "source": "twitter"
                         })
                 else:
-                    print("No tweets extracted.")
+                    pass
                 
                 await browser.close()
 
         except Exception as e:
-            print(f"Error browsing Twitter: {e}")
+            pass
             
         return raw_tweets

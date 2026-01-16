@@ -150,7 +150,6 @@ async def generate_briefing(request: BriefingRequest):
         return final_output
 
     except Exception as e:
-        print(f"Error in generation: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/briefing/download")
