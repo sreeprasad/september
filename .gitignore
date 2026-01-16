@@ -6,3 +6,4 @@ __pycache__/
 pipeline_output.json
 check_deps.py
 backend/data/cache/
+backend/venv/
