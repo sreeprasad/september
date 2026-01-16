@@ -1,0 +1,7 @@
+{
+  "type": "chart",
+  "chartType": "pie",
+  "data": "{{briefingData.themes.frequency_breakdown}}",
+  "title": "Topic Distribution",
+  "colors": ["#4F46E5", "#10B981", "#F59E0B", "#EF4444"]
+}

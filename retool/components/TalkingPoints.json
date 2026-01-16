@@ -1,0 +1,19 @@
+{
+  "type": "listView",
+  "data": "{{briefingData.talking_points}}",
+  "itemTemplate": {
+    "type": "container",
+    "components": [
+      {
+        "type": "text",
+        "value": "{{item.point}}",
+        "style": { "fontWeight": "bold" }
+      },
+      {
+        "type": "text",
+        "value": "{{item.context}}",
+        "style": { "fontSize": "12px", "color": "#666" }
+      }
+    ]
+  }
+}

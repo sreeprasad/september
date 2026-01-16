@@ -1,0 +1,25 @@
+{
+  "type": "container",
+  "title": "Conversation Scenarios",
+  "components": [
+    {
+      "type": "tabs",
+      "tabs": [
+        {
+          "label": "Likely Questions",
+          "content": {
+            "type": "listView",
+            "data": "{{briefingData.mock_conversations.likely_questions}}"
+          }
+        },
+        {
+          "label": "Pitch Simulation",
+          "content": {
+            "type": "chatWidget",
+            "messages": "{{briefingData.mock_conversations.pitch_simulation}}"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "person": {
+    "name": "Jane Doe",
+    "role": "Chief Technology Officer",
+    "company": "TechCorp",
+    "professional_identity": "Developer advocate focused on DX",
+    "career_trajectory": "IC -> Lead -> CTO"
+  },
+  "themes": {
+    "primary": "developer experience",
+    "secondary": [
+      "AI/ML",
+      "open source",
+      "mentorship"
+    ],
+    "frequency_breakdown": {
+      "developer experience": 0.45,
+      "AI/ML": 0.3,
+      "open source": 0.15,
+      "mentorship": 0.1
+    }
+  },
+  "sentiment": {
+    "overall": "",
+    "passion_topics": [
+      "open source",
+      "mentorship"
+    ],
+    "concerns": [
+      "tech debt",
+      "burnout"
+    ],
+    "communication_style": "direct and technical"
+  },
+  "insights": [
+    {
+      "insight": "Posts about devex 3x more than role suggests",
+      "confidence": 0.92,
+      "evidence": [
+        "post_id_1",
+        "post_id_2"
+      ]
+    }
+  ],
+  "company_context": {
+    "name": "TechCorp",
+    "relevance_score": 0.85,
+    "key_facts": [
+      "TechCorp raises Series B led by Sequoia",
+      "TechCorp launches new enterprise product"
+    ],
+    "recent_developments": [
+      "TechCorp raises Series B led by Sequoia",
+      "TechCorp launches new enterprise product"
+    ]
+  },
+  "extraction_metadata": {
+    "confidence_score": 0.95,
+    "data_quality": "high",
+    "extraction_time": "1.2s"
+  },
+  "person_type": "executive",
+  "synthesis_config": {
+    "focus_areas": [
+      "strategy",
+      "business_impact",
+      "leadership"
+    ],
+    "talking_point_style": "high-level, outcome-focused"
+  },
+  "talking_points": [
+    {
+      "point": "Discuss approach to developer experience",
+      "context": "Relevant to their interest in developer experience and your meeting about End-to-end test run",
+      "why_selected": "High engagement topic for this executive",
+      "conversation_opener": "I noticed you've been writing a lot about developer experience lately...",
+      "expected_reaction": "Likely to share strong opinions and recent experiences"
+    },
+    {
+      "point": "Discuss approach to AI/ML",
+      "context": "Relevant to their interest in AI/ML and your meeting about End-to-end test run",
+      "why_selected": "High engagement topic for this executive",
+      "conversation_opener": "I noticed you've been writing a lot about AI/ML lately...",
+      "expected_reaction": "Likely to share strong opinions and recent experiences"
+    },
+    {
+      "point": "Discuss approach to open source",
+      "context": "Relevant to their interest in open source and your meeting about End-to-end test run",
+      "why_selected": "High engagement topic for this executive",
+      "conversation_opener": "I noticed you've been writing a lot about open source lately...",
+      "expected_reaction": "Likely to share strong opinions and recent experiences"
+    }
+  ],
+  "key_insights": [
+    {
+      "insight": "Posts about devex 3x more than role suggests",
+      "confidence": 0.92,
+      "evidence": [
+        "post_id_1",
+        "post_id_2"
+      ]
+    }
+  ],
+  "reasoning_chain": [
+    {
+      "decision": "Discuss approach to developer experience",
+      "reason": "High engagement topic for this executive",
+      "evidence": "Analysis of recent 15 posts showing 3x engagement on this topic",
+      "alternatives_considered": [
+        "Generic pleasantries",
+        "Standard company pitch"
+      ],
+      "confidence": 0.9053124611829899,
+      "explanation_for_user": "I chose to highlight this because it aligns with their recent high-engagement posts and your meeting goals."
+    },
+    {
+      "decision": "Discuss approach to AI/ML",
+      "reason": "High engagement topic for this executive",
+      "evidence": "Analysis of recent 15 posts showing 3x engagement on this topic",
+      "alternatives_considered": [
+        "Generic pleasantries",
+        "Standard company pitch"
+      ],
+      "confidence": 0.8759201089299862,
+      "explanation_for_user": "I chose to highlight this because it aligns with their recent high-engagement posts and your meeting goals."
+    },
+    {
+      "decision": "Discuss approach to open source",
+      "reason": "High engagement topic for this executive",
+      "evidence": "Analysis of recent 15 posts showing 3x engagement on this topic",
+      "alternatives_considered": [
+        "Generic pleasantries",
+        "Standard company pitch"
+      ],
+      "confidence": 0.9358162541405938,
+      "explanation_for_user": "I chose to highlight this because it aligns with their recent high-engagement posts and your meeting goals."
+    }
+  ],
+  "briefing_summary": "Briefing prepared for Jane Doe (executive). Focus on strategy, business_impact, leadership.",
+  "mock_conversations": {
+    "likely_questions": [
+      {
+        "question": "Given your work in End-to-end test run, how do you see this aligning with our roadmap?",
+        "response_framework": "Acknowledge -> Bridge -> Pivot",
+        "emphasize": [
+          "Value",
+          "Alignment"
+        ],
+        "avoid": [
+          "Defensiveness",
+          "Over-promising"
+        ],
+        "pivot_options": [
+          "Let's discuss the long-term view",
+          "Have you seen our case studies?"
+        ],
+        "follow_up_prepared": [
+          "Does that address your concern?",
+          "What are your thoughts on that approach?"
+        ]
+      },
+      {
+        "question": "What are the technical challenges you anticipate?",
+        "response_framework": "Acknowledge -> Bridge -> Pivot",
+        "emphasize": [
+          "Value",
+          "Alignment"
+        ],
+        "avoid": [
+          "Defensiveness",
+          "Over-promising"
+        ],
+        "pivot_options": [
+          "Let's discuss the long-term view",
+          "Have you seen our case studies?"
+        ],
+        "follow_up_prepared": [
+          "Does that address your concern?",
+          "What are your thoughts on that approach?"
+        ]
+      },
+      {
+        "question": "How does this compare to existing solutions in the market?",
+        "response_framework": "Acknowledge -> Bridge -> Pivot",
+        "emphasize": [
+          "Value",
+          "Alignment"
+        ],
+        "avoid": [
+          "Defensiveness",
+          "Over-promising"
+        ],
+        "pivot_options": [
+          "Let's discuss the long-term view",
+          "Have you seen our case studies?"
+        ],
+        "follow_up_prepared": [
+          "Does that address your concern?",
+          "What are your thoughts on that approach?"
+        ]
+      }
+    ],
+    "pitch_simulation": [
+      {
+        "speaker": "You",
+        "message": "I'd like to propose a partnership...",
+        "context": "Opening pitch"
+      },
+      {
+        "speaker": "Jane Doe",
+        "message": "That sounds interesting. How does it specifically address [Specific Pain Point]?",
+        "context": "Probing for relevance"
+      },
+      {
+        "speaker": "You",
+        "message": "It addresses [Specific Pain Point] by [Solution Mechanism].",
+        "context": "Direct answer"
+      },
+      {
+        "speaker": "Jane Doe",
+        "message": "I see. And what kind of resources would be required on our end?",
+        "context": "Evaluating feasibility"
+      },
+      {
+        "speaker": "You",
+        "message": "Minimal resources. We handle the heavy lifting via...",
+        "context": "Reassurance"
+      }
+    ],
+    "conversation_scenarios": {
+      "first_meeting": {
+        "context": "first_meeting",
+        "likely_opener": "Thanks for meeting. I'm interested to hear about your work in first_meeting.",
+        "questions_they_might_ask": [
+          "Can you elaborate on your experience?",
+          "How does this apply to our current situation?"
+        ],
+        "topics_to_avoid": [
+          "Internal politics",
+          "Competitor pricing"
+        ],
+        "topics_to_lean_into": [
+          "Innovation",
+          "Efficiency"
+        ],
+        "sample_dialogue": [
+          {
+            "speaker": "You",
+            "message": "Hi, thanks for the time."
+          },
+          {
+            "speaker": "Jane Doe",
+            "message": "Glad to meet you. What's on your mind?"
+          }
+        ]
+      },
+      "pitch": {
+        "context": "pitch",
+        "likely_opener": "Thanks for meeting. I'm interested to hear about your work in pitch.",
+        "questions_they_might_ask": [
+          "Can you elaborate on your experience?",
+          "How does this apply to our current situation?"
+        ],
+        "topics_to_avoid": [
+          "Internal politics",
+          "Competitor pricing"
+        ],
+        "topics_to_lean_into": [
+          "Innovation",
+          "Efficiency"
+        ],
+        "sample_dialogue": [
+          {
+            "speaker": "You",
+            "message": "Hi, thanks for the time."
+          },
+          {
+            "speaker": "Jane Doe",
+            "message": "Glad to meet you. What's on your mind?"
+          }
+        ]
+      },
+      "advice_seeking": {
+        "context": "advice_seeking",
+        "likely_opener": "Thanks for meeting. I'm interested to hear about your work in advice_seeking.",
+        "questions_they_might_ask": [
+          "Can you elaborate on your experience?",
+          "How does this apply to our current situation?"
+        ],
+        "topics_to_avoid": [
+          "Internal politics",
+          "Competitor pricing"
+        ],
+        "topics_to_lean_into": [
+          "Innovation",
+          "Efficiency"
+        ],
+        "sample_dialogue": [
+          {
+            "speaker": "You",
+            "message": "Hi, thanks for the time."
+          },
+          {
+            "speaker": "Jane Doe",
+            "message": "Glad to meet you. What's on your mind?"
+          }
+        ]
+      },
+      "partnership": {
+        "context": "partnership",
+        "likely_opener": "Thanks for meeting. I'm interested to hear about your work in partnership.",
+        "questions_they_might_ask": [
+          "Can you elaborate on your experience?",
+          "How does this apply to our current situation?"
+        ],
+        "topics_to_avoid": [
+          "Internal politics",
+          "Competitor pricing"
+        ],
+        "topics_to_lean_into": [
+          "Innovation",
+          "Efficiency"
+        ],
+        "sample_dialogue": [
+          {
+            "speaker": "You",
+            "message": "Hi, thanks for the time."
+          },
+          {
+            "speaker": "Jane Doe",
+            "message": "Glad to meet you. What's on your mind?"
+          }
+        ]
+      }
+    }
+  }
+}

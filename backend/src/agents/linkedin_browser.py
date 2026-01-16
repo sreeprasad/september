@@ -66,7 +66,7 @@ class LinkedInBrowserAgent:
         prioritized_posts = self.decision_engine.prioritize_data_points(raw_posts, meeting_context)
         decision_rationale = self.decision_engine.generate_reasoning(prioritized_posts)
         
-        return {
+        result = {
             "profile": raw_profile,
             "posts": prioritized_posts,
             "decision_metadata": {
@@ -75,3 +75,5 @@ class LinkedInBrowserAgent:
                 "decision_rationale": decision_rationale
             }
         }
+
+        return result

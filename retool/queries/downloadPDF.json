@@ -1,0 +1,13 @@
+{
+  "name": "downloadPDF",
+  "type": "REST API",
+  "resource": "BriefMeAPI",
+  "method": "POST",
+  "endpoint": "/api/briefing/download",
+  "body": {
+    "briefing_id": "{{briefingData.id}}"
+  },
+  "onSuccess": [
+    "utils.downloadFile(downloadPDF.data, 'briefing.pdf')"
+  ]
+}

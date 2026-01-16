@@ -1,0 +1,17 @@
+{
+  "name": "BriefMeDashboard",
+  "version": "1.0.0",
+  "description": "Dashboard for Yutori Navigator Briefings",
+  "components": [
+    { "$ref": "./components/ProfileCard.json" },
+    { "$ref": "./components/ThemeChart.json" },
+    { "$ref": "./components/TalkingPoints.json" },
+    { "$ref": "./components/WhyPanel.json" },
+    { "$ref": "./components/MockConversations.json" }
+  ],
+  "queries": [
+    { "$ref": "./queries/generateBriefing.json" },
+    { "$ref": "./queries/downloadPDF.json" }
+  ],
+  "styles": { "$ref": "./styles/theme.json" }
+}

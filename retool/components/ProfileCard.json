@@ -1,0 +1,24 @@
+{
+  "type": "container",
+  "components": [
+    {
+      "type": "image",
+      "source": "{{briefingData.person.photo_url}}",
+      "style": { "borderRadius": "50%", "width": "100px" }
+    },
+    {
+      "type": "text",
+      "value": "{{briefingData.person.name}}",
+      "style": { "fontSize": "24px", "fontWeight": "bold" }
+    },
+    {
+      "type": "text",
+      "value": "{{briefingData.person.role}} at {{briefingData.person.company}}"
+    },
+    {
+      "type": "text",
+      "value": "{{briefingData.person.professional_identity}}",
+      "style": { "fontStyle": "italic", "color": "#666" }
+    }
+  ]
+}

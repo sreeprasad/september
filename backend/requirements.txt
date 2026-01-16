@@ -3,3 +3,8 @@ pydantic
 python-dotenv
 agentql
 playwright
+fastapi
+uvicorn
+requests
+jinja2
+fpdf2

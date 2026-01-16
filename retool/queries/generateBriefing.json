@@ -1,0 +1,15 @@
+{
+  "name": "generateBriefing",
+  "type": "REST API",
+  "resource": "BriefMeAPI",
+  "method": "POST",
+  "endpoint": "/api/briefing/generate",
+  "body": {
+    "linkedin_url": "{{linkedinUrlInput.value}}",
+    "meeting_context": "{{meetingContextSelect.value}}"
+  },
+  "onSuccess": [
+    "briefingData.setValue(generateBriefing.data)",
+    "utils.showNotification({ message: 'Briefing generated!' })"
+  ]
+}
