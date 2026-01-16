@@ -39,7 +39,8 @@ def verify_end_to_end():
     try:
         # In a real scenario, we'd pass the ID from step 1
         download_response = requests.post(f"{base_url}/download", json={
-            "briefing_id": "test_id" 
+            "briefing_id": "test_id",
+            "linkedin_url": "https://linkedin.com/in/janedoe"
         })
         
         if download_response.status_code == 200:
