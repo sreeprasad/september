@@ -1,78 +1,63 @@
 import agentql
 from typing import List, Dict, Any
-import asyncio
+from collections import Counter
+import re
 
 class SemanticProfileExtractor:
     """
-    Uses AgentQL to semantically extract and structure profile data.
-    
-    Key differentiator: Understanding INTENT, not just text.
+    Uses semantic analysis to extract and structure profile data.
     """
 
     def __init__(self):
-        # Assuming AgentQL client initialization. 
-        # If AgentQL requires a session, it might be passed here or created per method.
-        # For now, following the pattern in the plan.
         pass
 
     async def extract_profile_themes(self, raw_posts: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Extract themes from posts using semantic analysis.
-
-        Example output:
-        {
-            "primary_theme": "developer experience",
-            "theme_frequency": {"devex": 0.45, "ai": 0.30, "leadership": 0.25},
-            "professional_identity": "Developer advocate focused on DX"
-        }
+        Extract themes from posts using simple keyword frequency analysis.
         """
-        # In a real implementation, this would likely use an LLM or AgentQL's data processing capabilities 
-        # to analyze the text content of the posts.
-        # Since AgentQL is primarily for web elements, this might be a conceptual step 
-        # or assuming AgentQL has a text-processing feature.
+        # Combine all post content
+        text = " ".join([p.get("content", "").lower() for p in raw_posts])
         
-        # Check for specific keywords to mock dynamic behavior
-        posts_text = " ".join([p.get("content", "").lower() for p in raw_posts])
+        # Simple stop words (expand as needed)
+        stop_words = {"the", "and", "a", "to", "of", "in", "is", "for", "on", "with", "my", "at", "it", "this", "that", "are", "was", "be", "as"}
         
-        if "reddit" in posts_text or "distributed systems" in posts_text:
-             return {
-                "primary_theme": "distributed systems",
-                "theme_frequency": {"distributed_systems": 0.50, "scaling": 0.30, "engineering_culture": 0.20},
-                "professional_identity": "High-scale Infrastructure Engineer"
-            }
+        # Tokenize and filter
+        words = re.findall(r'\w+', text)
+        filtered_words = [w for w in words if w not in stop_words and len(w) > 3]
+        
+        # Count frequency
+        word_counts = Counter(filtered_words)
+        common = word_counts.most_common(5)
+        
+        total_words = sum(word_counts.values()) or 1
+        frequency_breakdown = {word: count/total_words for word, count in common}
+        
+        primary_theme = common[0][0] if common else "general technology"
         
         return {
-            "primary_theme": "developer experience",
-            "theme_frequency": {"devex": 0.45, "ai": 0.30, "leadership": 0.25},
-            "professional_identity": "Developer advocate focused on DX"
+            "primary_theme": primary_theme,
+            "theme_frequency": frequency_breakdown,
+            "professional_identity": f"Professional focused on {primary_theme}"
         }
 
     async def extract_sentiment_patterns(self, posts: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Understand sentiment and emotional patterns.
-
-        Output:
-        {
-            "overall_sentiment": "positive",
-            "passion_topics": ["open source", "mentorship"],
-            "concerns": ["tech debt", "burnout"],
-            "communication_style": "direct and technical"
-        }
+        Extract sentiment patterns (simplified).
         """
+        text = " ".join([p.get("content", "").lower() for p in posts])
         
-        posts_text = " ".join([p.get("content", "").lower() for p in posts])
+        # Basic keyword matching for sentiment
+        positive_words = {"excited", "happy", "great", "love", "amazing", "proud", "grateful", "best", "good"}
+        concerns_words = {"challenge", "problem", "issue", "debt", "complex", "hard", "difficult", "struggle"}
         
-        if "reddit" in posts_text:
-             return {
-                "overall_sentiment": "enthusiastic",
-                "passion_topics": ["scaling", "infrastructure", "team culture"],
-                "concerns": ["reliability", "complexity"],
-                "communication_style": "technical and reflective"
-            }
-            
+        pos_count = sum(1 for w in text.split() if w in positive_words)
+        neg_count = sum(1 for w in text.split() if w in concerns_words)
+        
+        sentiment = "positive" if pos_count >= neg_count else "concerned"
+        
         return {
-            "overall_sentiment": "positive",
-            "passion_topics": ["open source", "mentorship"],
-            "concerns": ["tech debt", "burnout"],
-            "communication_style": "direct and technical"
+            "overall_sentiment": sentiment,
+            "passion_topics": ["technology", "growth"], 
+            "concerns": ["complexity"] if neg_count > 0 else [],
+            "communication_style": "professional"
         }

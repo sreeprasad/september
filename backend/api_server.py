@@ -59,8 +59,12 @@ async def generate_briefing(request: BriefingRequest):
         
         # Phase 1
         profile_data = await browser.browse_profile(request.linkedin_url, request.meeting_context)
-        company_name = profile_data["profile"]["company"]
-        role = profile_data["profile"]["current_role"]
+        
+        if not profile_data.get("profile"):
+             raise Exception("Failed to extract profile data. Please check the URL or try again later.")
+
+        company_name = profile_data["profile"].get("company", "Unknown")
+        role = profile_data["profile"].get("current_role", "Unknown")
         company_data = await researcher.research_company(company_name, role)
         
         phase1_output = {
@@ -78,20 +82,20 @@ async def generate_briefing(request: BriefingRequest):
         
         raw_extraction = {
             "person": {
-                "name": phase1_output["profile"]["name"],
-                "role": phase1_output["profile"]["current_role"],
-                "company": phase1_output["profile"]["company"],
+                "name": phase1_output["profile"].get("name"),
+                "role": phase1_output["profile"].get("current_role"),
+                "company": phase1_output["profile"].get("company"),
                 "professional_identity": themes.get("professional_identity", ""),
-                "career_trajectory": "IC -> Lead -> CTO"
+                "career_trajectory": "IC -> Lead -> CTO" # Still somewhat mocked unless we extract history
             },
             "themes": theme_insights,
             "sentiment": sentiment,
             "insights": insights,
             "company_context": {
-                "name": phase1_output["company_context"]["name"],
+                "name": phase1_output["company_context"].get("name"),
                 "relevance_score": 0.85,
-                "key_facts": phase1_output["company_context"]["recent_news"],
-                "recent_developments": phase1_output["company_context"]["recent_news"]
+                "key_facts": phase1_output["company_context"].get("recent_news", []),
+                "recent_developments": phase1_output["company_context"].get("recent_news", [])
             },
             "extraction_metadata": {
                 "confidence_score": 0.95,
@@ -134,6 +138,7 @@ async def generate_briefing(request: BriefingRequest):
         return final_output
 
     except Exception as e:
+        print(f"Error in generation: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/briefing/download")
@@ -144,35 +149,7 @@ async def download_briefing(request: DownloadRequest):
         data = cache_manager.get_from_cache(request.linkedin_url)
 
     if not data:
-        # Mock data fallback for demo purposes
-        data = {
-            "person": {
-                "name": "Jane Doe",
-                "role": "Chief Technology Officer",
-                "company": "TechCorp",
-                "professional_identity": "AI Strategy Leader",
-                "photo_url": "https://via.placeholder.com/150"
-            },
-            "themes": {
-                "frequency_breakdown": {
-                    "AI Strategy": 0.45,
-                    "Cloud Infrastructure": 0.30,
-                    "Digital Transformation": 0.25
-                }
-            },
-            "talking_points": [
-                {"point": "Discuss AI Governance", "context": "Relevant to recent posts"},
-                {"point": "Cloud Migration Challenges", "context": "Aligns with company news"},
-                {"point": "Team Scaling", "context": "Based on job postings"}
-            ],
-            "company_context": {
-                "name": "TechCorp",
-                "recent_developments": ["Series B Funding Announced", "New Product Launch"]
-            },
-            "sentiment": {
-                "communication_style": "Direct and strategic"
-            }
-        }
+        raise HTTPException(status_code=404, detail="Briefing not found. Please generate it first.")
     
     pdf_gen = PDFGenerator()
     pdf_bytes = pdf_gen.generate(data)
