@@ -17,6 +17,9 @@ export default function Home() {
     setError(null);
     setBriefingData(null);
     
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
     try {
       const response = await fetch("http://localhost:8000/api/briefing/generate", {
         method: "POST",
@@ -26,7 +29,9 @@ export default function Home() {
           twitter_url: data.twitterHandle,
           meeting_context: data.context,
         }),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
       
       const responseData = await response.json();
       

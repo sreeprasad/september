@@ -54,14 +54,7 @@ def log_debug(message: str, data: dict = None, hypothesis_id: str = None):
 
 @app.on_event("startup")
 async def startup_event():
-    # #region agent log
-    api_keys_status = {
-        "ANTHROPIC": bool(os.getenv("ANTHROPIC_API_KEY")),
-        "ELEVENLABS": bool(os.getenv("ELEVENLABS_API_KEY")),
-        "YUTORI": bool(YUTORI_CONFIG.get("api_key"))
-    }
-    log_debug("Backend server starting", {"keys_present": api_keys_status}, "H_BACKEND_START")
-    # #endregion
+    log_debug("Backend server starting", {}, "H_BACKEND_START")
 # --- DEBUG INSTRUMENTATION END ---
 
 # Allow CORS
@@ -170,9 +163,6 @@ def parse_json_response(response_text: str) -> dict:
 
 @app.get("/")
 def health_check():
-    # #region agent log
-    log_debug("Health check called", {}, "H_HEALTH")
-    # #endregion
     return {"status": "ok", "service": "BriefMe Intelligence Suite API"}
 
 @app.post("/api/briefing/generate")
@@ -304,9 +294,6 @@ async def generate_briefing(request: BriefingRequest):
 
 @app.post("/api/briefing/download")
 async def download_briefing(request: DownloadRequest):
-    # #region agent log
-    log_debug("Download briefing called", {"url": request.linkedin_url}, "H_DOWNLOAD")
-    # #endregion
     # Try to get data from cache if URL provided
     data = None
     if request.linkedin_url:

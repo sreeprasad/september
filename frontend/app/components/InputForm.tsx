@@ -97,9 +97,11 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
                     aria-label="Meeting Context"
                   >
                     <option value="first meeting, potential partnership" className="bg-[#0B0C15] text-white py-2">Partnership Meeting</option>
-                    <option value="sales pitch" className="bg-[#0B0C15] text-white py-2">Sales Pitch</option>
-                    <option value="mentorship request" className="bg-[#0B0C15] text-white py-2">Mentorship Request</option>
+                    <option value="sales discovery" className="bg-[#0B0C15] text-white py-2">Sales Discovery</option>
                     <option value="job interview" className="bg-[#0B0C15] text-white py-2">Job Interview</option>
+                    <option value="investor pitch" className="bg-[#0B0C15] text-white py-2">Investor Pitch</option>
+                    <option value="casual networking" className="bg-[#0B0C15] text-white py-2">Casual Networking</option>
+                    <option value="mentorship session" className="bg-[#0B0C15] text-white py-2">Mentorship Session</option>
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" aria-hidden="true">
                     <ChevronsUpDown size={18} />
