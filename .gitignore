@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+.DS_Store
+*.pdf
+pipeline_output.json
+check_deps.py
+backend/data/cache/
