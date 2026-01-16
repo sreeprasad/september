@@ -20,7 +20,7 @@ async def main():
     print("\n=== PHASE 1: Yutori Navigator ===")
     
     api_key = YUTORI_CONFIG.get("api_key", "mock_key")
-    target_url = "https://linkedin.com/in/janedoe"
+    target_url = "https://www.linkedin.com/in/sreeprasadatrit/"
     meeting_context = "first meeting, potential technical partnership"
     
     browser = LinkedInBrowserAgent(api_key=api_key)

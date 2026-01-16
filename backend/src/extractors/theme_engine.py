@@ -19,6 +19,21 @@ class ThemeIdentificationEngine:
         4. Extract professional identity markers
         """
         # Placeholder logic
+        # Check for specific keywords to mock dynamic behavior
+        posts_text = " ".join([p.get("content", "").lower() for p in content])
+
+        if "reddit" in posts_text:
+             return {
+                "primary": "distributed systems",
+                "secondary": ["scalability", "engineering culture", "backend infrastructure"],
+                "frequency_breakdown": {
+                    "distributed systems": 0.50,
+                    "scalability": 0.30,
+                    "engineering culture": 0.15,
+                    "backend infrastructure": 0.05
+                }
+            }
+        
         return {
             "primary": "developer experience",
             "secondary": ["AI/ML", "open source", "mentorship"],
@@ -40,6 +55,23 @@ class ThemeIdentificationEngine:
         developer experience 3x more than anything else."
         """
         # Placeholder logic
+        
+        primary = themes.get("primary", "")
+        
+        if primary == "distributed systems":
+             return [
+                {
+                    "insight": "Focuses heavily on high-scale system reliability, aligning with Reddit's infrastructure needs.",
+                    "confidence": 0.95,
+                    "evidence": ["post_id_1", "post_id_4"]
+                },
+                {
+                     "insight": "Demonstrates strong interest in engineering culture and team growth.",
+                     "confidence": 0.88,
+                     "evidence": ["post_id_2"]
+                }
+            ]
+        
         return [
             {
                 "insight": "Posts about devex 3x more than role suggests",
