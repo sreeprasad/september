@@ -1,16 +1,29 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
 const COLORS = ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function ThemeChart({ themes }: { themes: any }) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
+
   if (!themes || !themes.frequency_breakdown) return null;
 
-  const data = Object.entries(themes.frequency_breakdown).map(([name, value], index) => ({
+  const data = Object.entries(themes.frequency_breakdown).map(([name, value]) => ({
     name,
     value: (value as number) * 100, // Convert to percentage
   }));
+
+  if (!isMounted) {
+      return <div className="h-[300px] w-full bg-slate-50 rounded-lg animate-pulse flex items-center justify-center text-slate-400">Loading Chart...</div>;
+  }
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">

@@ -1,0 +1,5 @@
+{
+  "name": "BriefMe",
+  "description": "AI-powered meeting intelligence and briefing generator using Gemini and Google Search.",
+  "requestFramePermissions": []
+}

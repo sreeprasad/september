@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Search, BrainCircuit, MessageSquare, CheckCircle2, Circle } from "lucide-react";
+import { Search, BrainCircuit, MessageSquare, CheckCircle2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const steps = [

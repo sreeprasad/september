@@ -1,5 +1,6 @@
 import { Lightbulb, Info, CheckCircle2, TrendingUp } from "lucide-react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function WhyPanel({ reasoning }: { reasoning: any[] }) {
   if (!reasoning || reasoning.length === 0) {
       return (
@@ -42,7 +43,8 @@ export default function WhyPanel({ reasoning }: { reasoning: any[] }) {
         {/* Timeline Line */}
         <div className="absolute top-3 bottom-10 left-[19px] w-[2px] bg-gradient-to-b from-slate-200 via-slate-200 to-transparent"></div>
 
-        {reasoning.map((item, index) => (
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {reasoning.map((item: any, index: number) => (
           <div key={index} className="relative pl-12 pb-8 group last:pb-0">
              {/* Timeline Dot */}
              <div className="absolute left-[10px] top-0 w-5 h-5 rounded-full border-4 border-white bg-slate-200 ring-1 ring-slate-100 group-hover:bg-amber-500 group-hover:ring-amber-200 transition-all duration-500 z-10 shadow-sm"></div>

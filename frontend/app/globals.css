@@ -1,35 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #030014;
+  --foreground: #ffffff;
+  --brief-primary: #6366f1;
+  --brief-surface: #0B0C15;
+  --brief-border: rgba(255, 255, 255, 0.1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brief-primary: var(--brief-primary);
+  --color-brief-surface: var(--brief-surface);
+  --color-brief-border: var(--brief-border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
-  background-size: 24px 24px;
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
 }
 
 @layer utilities {
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl;
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
   
   .custom-scrollbar::-webkit-scrollbar {
@@ -41,15 +39,44 @@ body {
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-200 rounded-full;
+    @apply bg-white/10 rounded-full;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-300;
+    @apply bg-white/20;
   }
 
-  /* Typography Polish */
-  h1, h2, h3, h4, h5, h6 {
-    letter-spacing: -0.025em;
+  /* Animations */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slide-up {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes gradient-xy {
+    0%, 100% {
+      background-size: 400% 400%;
+      background-position: left center;
+    }
+    50% {
+      background-size: 200% 200%;
+      background-position: right center;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out forwards;
+  }
+
+  .animate-gradient {
+    animation: gradient-xy 3s ease infinite;
   }
 }
