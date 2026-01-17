@@ -92,3 +92,4 @@
 {"sessionId": "debug-session", "runId": "run1", "hypothesisId": "company_research", "location": "company_researcher.py:17", "message": "research_company called", "data": {"company": "Reddit, Inc.", "role": null}, "timestamp": 1234567890}
 {"sessionId": "debug-session", "runId": "run1", "hypothesisId": "company_research_nav", "location": "company_researcher.py:27", "message": "Navigating to DDG", "data": {"url": "https://duckduckgo.com/?q=Reddit,+Inc.+news&t=h_&ia=news"}, "timestamp": 1234567890}
 {"sessionId": "debug-session", "runId": "run1", "hypothesisId": "company_research_news", "location": "company_researcher.py:41", "message": "News extracted", "data": {"news_count": 0}, "timestamp": 1234567890}
+{"sessionId": "debug-session", "runId": "verify-sponsors", "hypothesisId": "clients-init", "timestamp": 1768609212363, "message": "Client Init Status", "data": {"elevenlabs": true, "anthropic": true}}

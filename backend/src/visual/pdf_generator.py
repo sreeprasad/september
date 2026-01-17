@@ -1,5 +1,6 @@
 from fpdf import FPDF
 import io
+from .freepik_service import FreepikService
 
 class PDFGenerator:
     """
@@ -55,6 +56,33 @@ class PDFGenerator:
         pdf.ln(5)
         
         themes = briefing_data.get("themes", {}).get("frequency_breakdown", {})
+        
+        # Add Freepik Icon for top theme (Freepik Integration)
+        if themes:
+            try:
+                top_theme = list(themes.keys())[0]
+                freepik = FreepikService()
+                # Generate icon for the top theme
+                icon_b64 = freepik.generate_image(f"icon representing {top_theme}, minimalist vector style, blue and white")
+                
+                # #region agent log
+                import json, time
+                try:
+                    with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
+                        f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"freepik-integration","timestamp":int(time.time()*1000),"message":"PDF Icon Generation","data":{"success": bool(icon_b64)}})+"\n")
+                except: pass
+                # #endregion
+
+                if icon_b64:
+                    import base64
+                    img_data = base64.b64decode(icon_b64)
+                    # Position icon to the right of the header
+                    current_y = pdf.get_y()
+                    # Using io.BytesIO(img_data)
+                    pdf.image(io.BytesIO(img_data), x=150, y=current_y - 20, w=30)
+            except Exception as e:
+                print(f"Failed to add Freepik icon: {e}")
+
         if themes:
             pdf.set_font("Helvetica", "", 11)
             pdf.set_text_color(0, 0, 0)

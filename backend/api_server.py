@@ -58,6 +58,14 @@ except Exception as e:
     print(f"Warning: Failed to initialize Anthropic client: {e}")
     anthropic_client = None
 
+# #region agent log
+import json, time
+try:
+    with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
+        f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"clients-init","timestamp":int(time.time()*1000),"message":"Client Init Status","data":{"elevenlabs": bool(elevenlabs_client), "anthropic": bool(anthropic_client)}})+"\n")
+except: pass
+# #endregion
+
 COMPLIANCE_PROMPT = """You are a compliance analyst reviewing call center transcripts for regulatory violations.
 
 Analyze the following transcript and identify any compliance violations.

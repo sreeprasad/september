@@ -1,4 +1,5 @@
 from typing import List, Dict, Any
+from .tonic_client import FabricateClient
 
 class MockConversationGenerator:
     """
@@ -9,6 +10,7 @@ class MockConversationGenerator:
 
     def __init__(self, llm_client=None):
         self.llm_client = llm_client
+        self.fabricate_client = FabricateClient()
 
     async def generate_likely_questions(
         self,
@@ -16,26 +18,16 @@ class MockConversationGenerator:
         meeting_context: str
     ) -> List[Dict[str, Any]]:
         """
-        Generate questions the person is likely to ask using LLM.
+        Generate questions the person is likely to ask using Tonic Fabricate or LLM fallback.
         """
         name = profile_data.get('name', 'They')
         role = profile_data.get('role', 'Professional')
         company = profile_data.get('company', 'their company')
         
-        if not self.llm_client:
-            # Fallback to templates if no LLM client
-            return [
-                {
-                    "question": f"Given your work in {meeting_context}, how do you see this aligning with our roadmap?",
-                    "why_likely": f"As a {role}, {name} focuses on strategic alignment.",
-                    "response_strategy": "Highlight shared goals and long-term vision.",
-                    "follow_up_questions": ["What are the key milestones?", "How do we measure success?"]
-                }
-            ]
-
+        # Try Tonic Fabricate first
         prompt = f"""
-        You are an expert negotiation coach. Based on the following profile, generate 3 likely questions this person would ask in a "{meeting_context}" meeting.
-
+        Generate 3 likely questions this person would ask in a "{meeting_context}" meeting.
+        
         Profile:
         Name: {name}
         Role: {role}
@@ -52,6 +44,36 @@ class MockConversationGenerator:
             }}
         ]
         """
+        
+        fabricate_result = self.fabricate_client.generate(prompt)
+
+        # #region agent log
+        import json, time
+        try:
+            with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
+                f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"tonic-fallback","timestamp":int(time.time()*1000),"message":"Questions: Tonic vs Fallback","data":{"fabricate_success": bool(fabricate_result)}})+"\n")
+        except: pass
+        # #endregion
+
+        if fabricate_result:
+            # Tonic might return a list directly or a wrapped response depending on API
+            # Assuming client returns list based on our implementation
+            if isinstance(fabricate_result, list):
+                return fabricate_result
+            elif isinstance(fabricate_result, dict) and "data" in fabricate_result:
+                 return fabricate_result["data"]
+                 
+        # Fallback to LLM if Fabricate fails or is not configured
+        if not self.llm_client:
+            # Fallback to templates if no LLM client
+            return [
+                {
+                    "question": f"Given your work in {meeting_context}, how do you see this aligning with our roadmap?",
+                    "why_likely": f"As a {role}, {name} focuses on strategic alignment.",
+                    "response_strategy": "Highlight shared goals and long-term vision.",
+                    "follow_up_questions": ["What are the key milestones?", "How do we measure success?"]
+                }
+            ]
 
         try:
             message = self.llm_client.messages.create(
@@ -88,11 +110,42 @@ class MockConversationGenerator:
         your_pitch: str
     ) -> List[Dict[str, Any]]:
         """
-        Generate a simulated back-and-forth conversation using LLM.
+        Generate a simulated back-and-forth conversation using Tonic Fabricate or LLM fallback.
         """
         name = profile_data.get('name', 'Partner')
         role = profile_data.get('role', 'Professional')
         
+        prompt = f"""
+        Simulate a realistic dialogue between "You" (the pitcher) and "{name}" ({role}).
+        The pitch starts with: "{your_pitch}"
+        
+        Generate a 4-turn exchange (2 responses each).
+        
+        Return valid JSON:
+        [
+            {{"speaker": "You", "message": "...", "context": "..."}},
+            {{"speaker": "{name}", "message": "...", "context": "..."}}
+        ]
+        """
+        
+        # Try Tonic Fabricate first
+        fabricate_result = self.fabricate_client.generate(prompt)
+
+        # #region agent log
+        import json, time
+        try:
+            with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
+                f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"tonic-fallback","timestamp":int(time.time()*1000),"message":"Pitch: Tonic vs Fallback","data":{"fabricate_success": bool(fabricate_result)}})+"\n")
+        except: pass
+        # #endregion
+
+        if fabricate_result:
+             if isinstance(fabricate_result, list):
+                return fabricate_result
+             elif isinstance(fabricate_result, dict) and "data" in fabricate_result:
+                 return fabricate_result["data"]
+
+        # Fallback to LLM
         if not self.llm_client:
              # Fallback
              return [
@@ -117,19 +170,6 @@ class MockConversationGenerator:
                     "context": "Evaluating feasibility"
                 }
             ]
-
-        prompt = f"""
-        Simulate a realistic dialogue between "You" (the pitcher) and "{name}" ({role}).
-        The pitch starts with: "{your_pitch}"
-        
-        Generate a 4-turn exchange (2 responses each).
-        
-        Return valid JSON:
-        [
-            {{"speaker": "You", "message": "...", "context": "..."}},
-            {{"speaker": "{name}", "message": "...", "context": "..."}}
-        ]
-        """
         
         try:
             message = self.llm_client.messages.create(
