@@ -94,6 +94,7 @@ class LinkedInBrowserAgent:
             # If we fail (e.g. no AgentQL key or browser issue), we return empty to avoid breaking pipeline completely
             # but we are NOT falling back to mock data.
             print(f"Error browsing LinkedIn: {e}")
+            return {"error": str(e), "profile": {}, "posts": [], "decision_metadata": {}}
 
         # Intelligent Filtering
         prioritized_posts = self.decision_engine.prioritize_data_points(raw_posts, meeting_context)

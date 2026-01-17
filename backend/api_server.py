@@ -58,14 +58,6 @@ except Exception as e:
     print(f"Warning: Failed to initialize Anthropic client: {e}")
     anthropic_client = None
 
-# #region agent log
-import json, time
-try:
-    with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
-        f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"clients-init","timestamp":int(time.time()*1000),"message":"Client Init Status","data":{"elevenlabs": bool(elevenlabs_client), "anthropic": bool(anthropic_client)}})+"\n")
-except: pass
-# #endregion
-
 COMPLIANCE_PROMPT = """You are a compliance analyst reviewing call center transcripts for regulatory violations.
 
 Analyze the following transcript and identify any compliance violations.
@@ -180,6 +172,9 @@ async def generate_briefing(request: BriefingRequest):
         # Phase 1: LinkedIn Browsing
         profile_data = await browser.browse_profile(request.linkedin_url, request.meeting_context)
         
+        if profile_data.get("error"):
+             raise Exception(f"LinkedIn browsing failed: {profile_data['error']}")
+
         if not profile_data.get("profile"):
              raise Exception("Failed to extract profile data. Please check the URL or try again later.")
         
