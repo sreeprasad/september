@@ -2,18 +2,19 @@ import agentql
 from typing import List, Dict, Any
 from collections import Counter
 import re
+import json
 
 class SemanticProfileExtractor:
     """
     Uses semantic analysis to extract and structure profile data.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, llm_client=None):
+        self.llm_client = llm_client
 
     async def extract_profile_themes(self, raw_posts: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Extract themes from posts using simple keyword frequency analysis.
+        Extract themes from posts using LLM or simple keyword frequency analysis.
         """
         # Combine all post content safely
         safe_content = []
@@ -22,6 +23,12 @@ class SemanticProfileExtractor:
                 safe_content.append(p.get("content", ""))
                 
         text = " ".join([c.lower() for c in safe_content])
+        
+        if self.llm_client and text.strip():
+            try:
+                return await self._extract_themes_llm(safe_content)
+            except Exception as e:
+                print(f"LLM Profile extraction failed: {e}. Falling back.")
         
         # Simple stop words (expand as needed)
         stop_words = {
@@ -51,9 +58,49 @@ class SemanticProfileExtractor:
             "professional_identity": f"Professional focused on {primary_theme}"
         }
 
+    async def _extract_themes_llm(self, posts: List[str]) -> Dict[str, Any]:
+        """
+        Use LLM to extract profile themes and identity.
+        """
+        posts_text = "\n---\n".join(posts[:20])
+        
+        prompt = f"""
+        Analyze these LinkedIn posts to construct a professional profile.
+        
+        POSTS:
+        {posts_text}
+        
+        Determine:
+        1. Professional Identity (e.g., "AI Researcher", "Growth Marketer")
+        2. Primary Theme (The main topic they talk about)
+        3. A frequency breakdown of top themes (0.0-1.0)
+        
+        Return JSON:
+        {{
+            "primary_theme": "...",
+            "theme_frequency": {{ "Theme": 0.9, ... }},
+            "professional_identity": "..."
+        }}
+        """
+        
+        message = self.llm_client.messages.create(
+            model="claude-3-5-sonnet-20240620",
+            max_tokens=400,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        
+        response_text = message.content[0].text
+        
+        if "```json" in response_text:
+            response_text = response_text.split("```json")[1].split("```")[0]
+        elif "```" in response_text:
+            response_text = response_text.split("```")[1].split("```")[0]
+            
+        return json.loads(response_text)
+
     async def extract_sentiment_patterns(self, posts: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Extract sentiment patterns (simplified).
+        Extract sentiment patterns.
         """
         # Combine all post content safely
         safe_content = []
@@ -63,7 +110,13 @@ class SemanticProfileExtractor:
                 
         text = " ".join([c.lower() for c in safe_content])
         
-        # Basic keyword matching for sentiment
+        if self.llm_client and text.strip():
+             try:
+                 return await self._extract_sentiment_llm(safe_content)
+             except Exception as e:
+                 print(f"LLM Sentiment extraction failed: {e}")
+
+        # Basic keyword matching for sentiment (Fallback)
         positive_words = {"excited", "happy", "great", "love", "amazing", "proud", "grateful", "best", "good"}
         concerns_words = {"challenge", "problem", "issue", "debt", "complex", "hard", "difficult", "struggle"}
         
@@ -78,3 +131,39 @@ class SemanticProfileExtractor:
             "concerns": ["complexity"] if neg_count > 0 else [],
             "communication_style": "professional"
         }
+
+    async def _extract_sentiment_llm(self, posts: List[str]) -> Dict[str, Any]:
+        """
+        Use LLM for sentiment analysis.
+        """
+        posts_text = "\n---\n".join(posts[:20])
+        
+        prompt = f"""
+        Analyze the sentiment and communication style of these posts.
+        
+        POSTS:
+        {posts_text}
+        
+        Return JSON:
+        {{
+            "overall_sentiment": "positive|neutral|concerned|analytical",
+            "passion_topics": ["topic1", "topic2"],
+            "concerns": ["concern1", "concern2"],
+            "communication_style": "e.g., formal, casual, visionary, technical"
+        }}
+        """
+        
+        message = self.llm_client.messages.create(
+            model="claude-3-5-sonnet-20240620",
+            max_tokens=400,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        
+        response_text = message.content[0].text
+        
+        if "```json" in response_text:
+            response_text = response_text.split("```json")[1].split("```")[0]
+        elif "```" in response_text:
+            response_text = response_text.split("```")[1].split("```")[0]
+            
+        return json.loads(response_text)

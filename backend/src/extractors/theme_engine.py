@@ -1,15 +1,19 @@
 from typing import List, Dict, Any
 from collections import Counter
 import re
+import json
 
 class ThemeIdentificationEngine:
     """
     Goes beyond text parsing to identify meaningful themes.
     """
 
+    def __init__(self, llm_client=None):
+        self.llm_client = llm_client
+
     def identify_themes(self, content: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Identify and rank themes from content using frequency analysis.
+        Identify and rank themes from content using frequency analysis or LLM.
         """
         # Handle None in content
         safe_content = []
@@ -19,6 +23,12 @@ class ThemeIdentificationEngine:
         
         text = " ".join([c.lower() for c in safe_content])
         
+        if self.llm_client and text.strip():
+            try:
+                return self._identify_themes_llm(safe_content)
+            except Exception as e:
+                print(f"LLM Theme extraction failed: {e}. Falling back to frequency analysis.")
+
         stop_words = {
             "the", "and", "a", "to", "of", "in", "is", "for", "on", "with", "my", "at", "it", "this", "that", "are", "was", "be", "as",
             "about", "from", "have", "would", "will", "just", "like", "more", "wanted", "share", "something", "thanks", "please",
@@ -45,6 +55,52 @@ class ThemeIdentificationEngine:
             "frequency_breakdown": frequency_breakdown
         }
 
+    def _identify_themes_llm(self, posts: List[str]) -> Dict[str, Any]:
+        """
+        Use LLM to identify themes from posts.
+        """
+        # Truncate posts if too long
+        posts_text = "\n---\n".join(posts[:20]) # Limit to 20 posts
+        
+        prompt = f"""
+        Analyze the following social media posts to identify the key professional themes and topics this person discusses.
+        
+        POSTS:
+        {posts_text}
+        
+        Identify:
+        1. The Primary Theme (the single most dominant topic)
+        2. Secondary Themes (2-4 other important topics)
+        3. A rough frequency/importance score for each (0.0 to 1.0)
+        
+        Return JSON in this format:
+        {{
+            "primary": "Theme Name",
+            "secondary": ["Theme 2", "Theme 3", "Theme 4"],
+            "frequency_breakdown": {{
+                "Theme Name": 0.8,
+                "Theme 2": 0.5,
+                "Theme 3": 0.3
+            }}
+        }}
+        """
+        
+        message = self.llm_client.messages.create(
+            model="claude-3-5-sonnet-20240620",
+            max_tokens=500,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        
+        response_text = message.content[0].text
+        
+        # Parse JSON
+        if "```json" in response_text:
+            response_text = response_text.split("```json")[1].split("```")[0]
+        elif "```" in response_text:
+            response_text = response_text.split("```")[1].split("```")[0]
+            
+        return json.loads(response_text)
+
     def generate_theme_insights(self, themes: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Generate human-readable insights from themes.
@@ -54,8 +110,8 @@ class ThemeIdentificationEngine:
         
         return [
             {
-                "insight": f"Posts about {primary} with {(frequency*100):.1f}% frequency.",
+                "insight": f"Primary focus on {primary} (approx. {int(frequency*100)}% relevance).",
                 "confidence": 0.85,
-                "evidence": ["frequency_analysis"]
+                "evidence": ["content_analysis"]
             }
         ]

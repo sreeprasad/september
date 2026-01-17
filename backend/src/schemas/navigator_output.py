@@ -30,6 +30,7 @@ class CompanyContext(BaseModel):
     funding: Optional[Funding] = None
     recent_news: List[str] = []
     competitors: List[str] = []
+    talking_points: List[Dict[str, Any]] = [] # Added to support Yutori output
 
 class DecisionMetadata(BaseModel):
     total_data_points_found: int
