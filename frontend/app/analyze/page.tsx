@@ -156,23 +156,33 @@ export default function AnalyzePage() {
           </div>
 
           {activeTab === "upload" ? (
-            <div 
-              className="border-2 border-dashed border-white/10 rounded-xl p-10 text-center hover:border-indigo-500/50 hover:bg-white/5 transition-all cursor-pointer group"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept="audio/*"
-                onChange={handleFileUpload}
-              />
-              <div className="w-16 h-16 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Upload className="w-8 h-8 text-indigo-400" />
+            isLoading ? (
+              <div className="border-2 border-dashed border-indigo-500/50 rounded-xl p-10 text-center bg-indigo-500/5">
+                <div className="w-16 h-16 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+                </div>
+                <p className="text-white font-medium mb-1">Processing audio...</p>
+                <p className="text-slate-500 text-sm">Transcribing and analyzing for compliance</p>
               </div>
-              <p className="text-white font-medium mb-1">Click to upload or drag and drop</p>
-              <p className="text-slate-500 text-sm">MP3, WAV, M4A (Max 10MB)</p>
-            </div>
+            ) : (
+              <div
+                className="border-2 border-dashed border-white/10 rounded-xl p-10 text-center hover:border-indigo-500/50 hover:bg-white/5 transition-all cursor-pointer group"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  accept="audio/*"
+                  onChange={handleFileUpload}
+                />
+                <div className="w-16 h-16 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Upload className="w-8 h-8 text-indigo-400" />
+                </div>
+                <p className="text-white font-medium mb-1">Click to upload or drag and drop</p>
+                <p className="text-slate-500 text-sm">MP3, WAV, M4A (Max 10MB)</p>
+              </div>
+            )
           ) : (
             <div className="space-y-4">
               <textarea
