@@ -158,8 +158,8 @@ async def generate_briefing(request: BriefingRequest):
         browser = LinkedInBrowserAgent(api_key=api_key)
         twitter_browser = TwitterBrowserAgent(api_key=api_key)
         researcher = CompanyResearcher(api_key=api_key)
-        extractor = SemanticProfileExtractor()
-        theme_engine = ThemeIdentificationEngine()
+        extractor = SemanticProfileExtractor(llm_client=anthropic_client)
+        theme_engine = ThemeIdentificationEngine(llm_client=anthropic_client)
         transformer = StructuredDataTransformer()
         synthesis_pipeline = AdaptiveSynthesisPipeline(llm_client=anthropic_client)
         
