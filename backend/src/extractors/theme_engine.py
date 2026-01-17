@@ -13,7 +13,13 @@ class ThemeIdentificationEngine:
         """
         text = " ".join([p.get("content", "").lower() for p in content])
         
-        stop_words = {"the", "and", "a", "to", "of", "in", "is", "for", "on", "with", "my", "at", "it", "this", "that", "are", "was", "be", "as"}
+        stop_words = {
+            "the", "and", "a", "to", "of", "in", "is", "for", "on", "with", "my", "at", "it", "this", "that", "are", "was", "be", "as",
+            "about", "from", "have", "would", "will", "just", "like", "more", "wanted", "share", "something", "thanks", "please",
+            "what", "when", "where", "who", "which", "why", "how", "can", "could", "should", "your", "their", "our", "been", "has",
+            "there", "here", "really", "very", "much", "also", "some", "other", "into", "over", "after", "before", "out", "only",
+            "want", "need", "good", "great", "best", "better", "know", "think", "make", "take", "time", "work", "people", "years"
+        }
         
         words = re.findall(r'\w+', text)
         filtered_words = [w for w in words if w not in stop_words and len(w) > 3]

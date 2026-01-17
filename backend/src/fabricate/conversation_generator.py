@@ -95,7 +95,28 @@ class MockConversationGenerator:
         
         if not self.llm_client:
              # Fallback
-             return []
+             return [
+                {
+                    "speaker": "You",
+                    "message": your_pitch,
+                    "context": "Opening pitch"
+                },
+                {
+                    "speaker": name,
+                    "message": "That sounds interesting. How does it specifically address our current challenges?",
+                    "context": "Probing for relevance"
+                },
+                {
+                    "speaker": "You",
+                    "message": "It addresses them by streamlining your workflow and providing actionable insights.",
+                    "context": "Direct answer"
+                },
+                {
+                    "speaker": name,
+                    "message": "I see. And what kind of resources would be required on our end?",
+                    "context": "Evaluating feasibility"
+                }
+            ]
 
         prompt = f"""
         Simulate a realistic dialogue between "You" (the pitcher) and "{name}" ({role}).
