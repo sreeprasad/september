@@ -40,7 +40,14 @@ class PersonTypeClassifier:
         """
         Classify person type based on role, themes, and content.
         """
-        role = profile_data.get("role", "").lower()
+        if profile_data is None:
+            profile_data = {}
+
+        role = profile_data.get("role", "")
+        if role is None:
+            role = ""
+        role = role.lower()
+        
         company_context = profile_data.get("company_context", {})
         
         # Heuristic based classification

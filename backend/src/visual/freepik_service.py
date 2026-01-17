@@ -31,23 +31,8 @@ class FreepikService:
             "num_images": 1
         }
         
-        # #region agent log
-        import json, time
-        try:
-            with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
-                f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"freepik-api","timestamp":int(time.time()*1000),"message":"Calling Freepik","data":{"prompt":prompt, "has_key": bool(self.api_key)}})+"\n")
-        except: pass
-        # #endregion
-
         try:
             response = requests.post(url, headers=headers, json=payload, timeout=30)
-
-            # #region agent log
-            try:
-                with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
-                    f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"freepik-api","timestamp":int(time.time()*1000),"message":"Freepik Response","data":{"status":response.status_code}})+"\n")
-            except: pass
-            # #endregion
 
             if response.status_code == 200:
                 data = response.json()

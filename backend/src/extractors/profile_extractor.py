@@ -15,8 +15,13 @@ class SemanticProfileExtractor:
         """
         Extract themes from posts using simple keyword frequency analysis.
         """
-        # Combine all post content
-        text = " ".join([p.get("content", "").lower() for p in raw_posts])
+        # Combine all post content safely
+        safe_content = []
+        for p in raw_posts:
+            if p and isinstance(p, dict) and p.get("content"):
+                safe_content.append(p.get("content", ""))
+                
+        text = " ".join([c.lower() for c in safe_content])
         
         # Simple stop words (expand as needed)
         stop_words = {
@@ -50,7 +55,13 @@ class SemanticProfileExtractor:
         """
         Extract sentiment patterns (simplified).
         """
-        text = " ".join([p.get("content", "").lower() for p in posts])
+        # Combine all post content safely
+        safe_content = []
+        for p in posts:
+            if p and isinstance(p, dict) and p.get("content"):
+                safe_content.append(p.get("content", ""))
+                
+        text = " ".join([c.lower() for c in safe_content])
         
         # Basic keyword matching for sentiment
         positive_words = {"excited", "happy", "great", "love", "amazing", "proud", "grateful", "best", "good"}

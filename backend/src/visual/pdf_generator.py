@@ -65,14 +65,6 @@ class PDFGenerator:
                 # Generate icon for the top theme
                 icon_b64 = freepik.generate_image(f"icon representing {top_theme}, minimalist vector style, blue and white")
                 
-                # #region agent log
-                import json, time
-                try:
-                    with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
-                        f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"freepik-integration","timestamp":int(time.time()*1000),"message":"PDF Icon Generation","data":{"success": bool(icon_b64)}})+"\n")
-                except: pass
-                # #endregion
-
                 if icon_b64:
                     import base64
                     img_data = base64.b64decode(icon_b64)
