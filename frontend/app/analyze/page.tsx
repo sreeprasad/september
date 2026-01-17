@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import DottedBackground from "../components/DottedBackground";
 import Header from "../components/Header";
 import { Upload, FileText, AlertTriangle, CheckCircle, Search, Loader2 } from "lucide-react";
@@ -21,12 +21,32 @@ interface AnalyzeResult {
   transcript?: string;
 }
 
+const loadingMemes = [
+  "Teaching AI to listen... 🎧",
+  "Decoding human speak... 🤖",
+  "Finding the compliance needle in the haystack... 🔍",
+  "Consulting the regulation spirits... 👻",
+  "Making sure nobody said anything spicy... 🌶️",
+  "Scanning for 'per my last email' energy... 📧",
+  "Checking if anyone promised the moon... 🌙",
+  "Looking for fine print violations... 🔬",
+];
+
 export default function AnalyzePage() {
   const [activeTab, setActiveTab] = useState<"upload" | "text">("upload");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<AnalyzeResult | null>(null);
   const [transcript, setTranscript] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [memeIndex, setMemeIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isLoading) return;
+    const interval = setInterval(() => {
+      setMemeIndex((prev) => (prev + 1) % loadingMemes.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -162,7 +182,9 @@ export default function AnalyzePage() {
                   <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
                 </div>
                 <p className="text-white font-medium mb-1">Processing audio...</p>
-                <p className="text-slate-500 text-sm">Transcribing and analyzing for compliance</p>
+                <p className="text-slate-400 text-sm mt-3 h-6 transition-all duration-300">
+                  {loadingMemes[memeIndex]}
+                </p>
               </div>
             ) : (
               <div
