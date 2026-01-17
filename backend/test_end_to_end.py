@@ -13,7 +13,7 @@ def verify_end_to_end():
     start_time = time.time()
     try:
         response = requests.post(f"{base_url}/generate", json={
-            "linkedin_url": "https://linkedin.com/in/janedoe",
+            "linkedin_url": "https://www.linkedin.com/in/sreeprasadatrit/",
             "twitter_url": "https://twitter.com/janedoe",
             "meeting_context": "End-to-end test run"
         })
@@ -41,7 +41,7 @@ def verify_end_to_end():
         # In a real scenario, we'd pass the ID from step 1
         download_response = requests.post(f"{base_url}/download", json={
             "briefing_id": "test_id",
-            "linkedin_url": "https://linkedin.com/in/janedoe"
+            "linkedin_url": "https://www.linkedin.com/in/sreeprasadatrit/"
         })
         
         if download_response.status_code == 200:
