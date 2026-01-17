@@ -6,7 +6,7 @@ load_dotenv()
 client = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
 
 msg = client.messages.create(
-    model='claude-sonnet-4-20250514',
+    model='claude-sonnet-4-5',
     max_tokens=2000,
     messages=[{'role': 'user', 'content': '''Analyze this transcript for compliance. Return ONLY JSON.
     

@@ -164,7 +164,7 @@ async def analyze_audio_base64(request: Base64AudioRequest):
     os.unlink(tmp_path)
     transcript = result.text
     message = anthropic_client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-5",
         max_tokens=2000,
         messages=[{"role": "user", "content": COMPLIANCE_PROMPT.format(transcript=transcript)}]
     )
@@ -183,7 +183,7 @@ async def analyze_compliance(request: TranscriptRequest):
     
     try:
         message = anthropic_client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-5",
             max_tokens=2000,
             messages=[
                 {
@@ -244,7 +244,7 @@ async def analyze_audio_form(audio_base64: str = Form(...), filename: str = Form
     # Analyze
     transcript = result.text
     message = anthropic_client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-5",
         max_tokens=2000,
         messages=[{"role": "user", "content": COMPLIANCE_PROMPT.format(transcript=transcript)}]
     )
