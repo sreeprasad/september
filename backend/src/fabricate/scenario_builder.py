@@ -1,4 +1,5 @@
 from typing import Dict, Any, List
+import asyncio
 
 class ConversationScenarioBuilder:
     """
@@ -77,7 +78,8 @@ class ConversationScenarioBuilder:
         """
 
         try:
-            message = self.llm_client.messages.create(
+            message = await asyncio.to_thread(
+                self.llm_client.messages.create,
                 model="claude-sonnet-4-5",
                 max_tokens=1000,
                 messages=[{"role": "user", "content": prompt}]
@@ -90,7 +92,9 @@ class ConversationScenarioBuilder:
                  response_text = response_text.split("```")[1].split("```")[0]
             return json.loads(response_text)
         except Exception as e:
-            print(f"Error generating scenario: {e}")
+            import traceback
+            print(f"Error generating scenario for {context}: {e}")
+            print(f"Full traceback: {traceback.format_exc()}")
             return {
                 "context": context,
                 "likely_opener": "Hello.",
