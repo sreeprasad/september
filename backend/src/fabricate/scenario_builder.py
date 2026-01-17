@@ -1,5 +1,4 @@
 from typing import Dict, Any, List
-import asyncio
 
 class ConversationScenarioBuilder:
     """
@@ -78,8 +77,7 @@ class ConversationScenarioBuilder:
         """
 
         try:
-            message = await asyncio.to_thread(
-                self.llm_client.messages.create,
+            message = self.llm_client.messages.create(
                 model="claude-sonnet-4-5",
                 max_tokens=1000,
                 messages=[{"role": "user", "content": prompt}]
