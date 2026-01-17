@@ -161,12 +161,13 @@ async def generate_briefing(request: BriefingRequest):
         extractor = SemanticProfileExtractor()
         theme_engine = ThemeIdentificationEngine()
         transformer = StructuredDataTransformer()
-        synthesis_pipeline = AdaptiveSynthesisPipeline()
+        synthesis_pipeline = AdaptiveSynthesisPipeline(llm_client=anthropic_client)
         
         # Initialize Phase 5 Components
-        mock_generator = MockConversationGenerator()
-        response_coach = ResponseCoach()
-        scenario_builder = ConversationScenarioBuilder()
+        # Pass the initialized Anthropic client to the generators
+        mock_generator = MockConversationGenerator(llm_client=anthropic_client)
+        response_coach = ResponseCoach(llm_client=anthropic_client)
+        scenario_builder = ConversationScenarioBuilder(llm_client=anthropic_client)
         
         # Phase 1: LinkedIn Browsing
         profile_data = await browser.browse_profile(request.linkedin_url, request.meeting_context)
@@ -337,7 +338,7 @@ async def analyze_audio_base64(request: Base64AudioRequest):
         
         # Analyze
         message = anthropic_client.messages.create(
-            model="claude-sonnet-4-20250514", # Ensure model name is correct, likely claude-3-5-sonnet-20240620 or similar
+            model="claude-sonnet-4-5", 
             max_tokens=2000,
             messages=[{"role": "user", "content": COMPLIANCE_PROMPT.format(transcript=transcript)}]
         )
@@ -359,9 +360,9 @@ async def analyze_compliance(request: TranscriptRequest):
     
     try:
         # Note: Model name updated to a more standard one if the previous was hypothetical
-        # Reverting to what was in the source file: claude-sonnet-4-20250514 (Assuming this is correct for the hackathon context)
+        # Reverting to what was in the source file: claude-sonnet-4-5
         message = anthropic_client.messages.create(
-            model="claude-3-5-sonnet-20240620", # Using a standard model name just in case, or keep original if specific
+            model="claude-sonnet-4-5", 
             max_tokens=2000,
             messages=[
                 {
@@ -425,7 +426,7 @@ async def analyze_audio_form(audio_base64: str = Form(...), filename: str = Form
         
         # Analyze
         message = anthropic_client.messages.create(
-            model="claude-3-5-sonnet-20240620", 
+            model="claude-sonnet-4-5", 
             max_tokens=2000,
             messages=[{"role": "user", "content": COMPLIANCE_PROMPT.format(transcript=transcript)}]
         )

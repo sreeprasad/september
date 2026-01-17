@@ -9,9 +9,9 @@ class AdaptiveSynthesisPipeline:
     Dynamically generates synthesis logic based on person type.
     """
 
-    def __init__(self):
+    def __init__(self, llm_client=None):
         self.classifier = PersonTypeClassifier()
-        self.tp_generator = TalkingPointsGenerator()
+        self.tp_generator = TalkingPointsGenerator(llm_client=llm_client)
         self.reasoning_generator = ReasoningChainGenerator()
 
     async def synthesize(self, extracted_data: Dict[str, Any], meeting_context: str) -> Dict[str, Any]:
@@ -29,7 +29,7 @@ class AdaptiveSynthesisPipeline:
         
         # Step 2: Generate Talking Points
         themes = extracted_data.get("themes", {})
-        talking_points = await self.tp_generator.generate(themes, person_type, meeting_context)
+        talking_points = await self.tp_generator.generate(themes, person_type, meeting_context, profile_name=profile_data.get("name", "Candidate"))
         
         # Step 3: Generate Reasoning Chain
         reasoning_chain = self.reasoning_generator.generate_chain(talking_points)
