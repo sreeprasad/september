@@ -65,7 +65,7 @@ class TalkingPointsGenerator:
 
         try:
             message = self.llm_client.messages.create(
-                model="claude-3-5-sonnet-20240620",
+                model="claude-sonnet-4-5",
                 max_tokens=1000,
                 messages=[{"role": "user", "content": prompt}]
             )
