@@ -4,7 +4,6 @@ from playwright.async_api import async_playwright
 import agentql
 from .decision_engine import NavigatorDecisionEngine
 import os
-import json
 
 class LinkedInBrowserAgent:
     """
