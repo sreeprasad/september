@@ -14,11 +14,17 @@ class CompanyResearcher:
         """
         Research company and prioritize information based on context.
         """
+        # Ensure inputs are safe strings
+        if company_name is None:
+            company_name = "Unknown"
+        if person_role is None:
+            person_role = "Unknown"
+
         print(f"Researching company: {company_name} for role: {person_role}")
         
         recent_news = []
-
-        if not company_name:
+        
+        if not company_name or company_name == "Unknown":
              print("Warning: No company name provided for research.")
              return {
                 "name": "Unknown",
@@ -29,7 +35,7 @@ class CompanyResearcher:
             }
         
         try:
-             async with async_playwright() as p:
+            async with async_playwright() as p:
                 browser = await p.chromium.launch(headless=True)
                 page = await browser.new_page()
                 # DuckDuckGo search for news

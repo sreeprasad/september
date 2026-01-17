@@ -11,7 +11,13 @@ class ThemeIdentificationEngine:
         """
         Identify and rank themes from content using frequency analysis.
         """
-        text = " ".join([p.get("content", "").lower() for p in content])
+        # Handle None in content
+        safe_content = []
+        for p in content:
+            if p and isinstance(p, dict) and p.get("content"):
+                safe_content.append(p.get("content", ""))
+        
+        text = " ".join([c.lower() for c in safe_content])
         
         stop_words = {
             "the", "and", "a", "to", "of", "in", "is", "for", "on", "with", "my", "at", "it", "this", "that", "are", "was", "be", "as",

@@ -18,6 +18,11 @@ class AdaptiveSynthesisPipeline:
         """
         Run adaptive synthesis pipeline.
         """
+        if extracted_data is None:
+            extracted_data = {}
+        if meeting_context is None:
+            meeting_context = "General meeting"
+
         # Step 1: Classify Person Type
         # We need to flatten the extracted data structure a bit or pass the relevant parts
         # extracted_data structure from Phase 2: { "person": {...}, "themes": {...}, ... }

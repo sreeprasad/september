@@ -47,14 +47,6 @@ class MockConversationGenerator:
         
         fabricate_result = self.fabricate_client.generate(prompt)
 
-        # #region agent log
-        import json, time
-        try:
-            with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
-                f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"tonic-fallback","timestamp":int(time.time()*1000),"message":"Questions: Tonic vs Fallback","data":{"fabricate_success": bool(fabricate_result)}})+"\n")
-        except: pass
-        # #endregion
-
         if fabricate_result:
             # Tonic might return a list directly or a wrapped response depending on API
             # Assuming client returns list based on our implementation
@@ -130,14 +122,6 @@ class MockConversationGenerator:
         
         # Try Tonic Fabricate first
         fabricate_result = self.fabricate_client.generate(prompt)
-
-        # #region agent log
-        import json, time
-        try:
-            with open("/Users/nihalnihalani/Desktop/Github/Orchestrator/.cursor/debug.log", "a") as f:
-                f.write(json.dumps({"sessionId":"debug-session","runId":"verify-sponsors","hypothesisId":"tonic-fallback","timestamp":int(time.time()*1000),"message":"Pitch: Tonic vs Fallback","data":{"fabricate_success": bool(fabricate_result)}})+"\n")
-        except: pass
-        # #endregion
 
         if fabricate_result:
              if isinstance(fabricate_result, list):

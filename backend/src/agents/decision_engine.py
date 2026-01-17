@@ -10,13 +10,12 @@ class NavigatorDecisionEngine:
     def prioritize_data_points(self, raw_posts: List[Dict[str, Any]], meeting_context: str) -> List[Dict[str, Any]]:
         """
         From many data points, surface the most relevant ones.
-        
-        Criteria:
-        1. Relevance to first meeting context (keywords)
-        2. Engagement (likes/comments)
-        3. Recency vs significance
         """
         scored_posts = []
+        
+        # Guard against None context
+        if meeting_context is None:
+            meeting_context = ""
         
         # Simple heuristic keywords based on context
         keywords = []
@@ -28,6 +27,9 @@ class NavigatorDecisionEngine:
             keywords = ["vision", "culture", "team", "future"]
 
         for post in raw_posts:
+            # Handle None post content
+            if not post or not isinstance(post, dict):
+                continue
             score = 0.5  # Base score
             
             # Engagement score (normalized)
@@ -47,7 +49,11 @@ class NavigatorDecisionEngine:
                 score += 0.2
                 
             # Keyword matching
-            content = post.get("content", "").lower()
+            content = post.get("content", "")
+            if content is None:
+                content = ""
+            content = content.lower()
+            
             matches = [k for k in keywords if k in content]
             if matches:
                 score += 0.3 * len(matches)
